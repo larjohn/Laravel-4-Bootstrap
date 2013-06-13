@@ -17,6 +17,10 @@ class HomeController extends BaseController {
 
 	public function showIndex()
 	{
+        $error =  RDFError::find("ArchitecturalStructure");
+
+       // var_dump($error->label);
+        var_dump($error->listing("domain"));
 		return View::make('home');
 	}
 
