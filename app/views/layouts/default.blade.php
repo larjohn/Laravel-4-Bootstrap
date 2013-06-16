@@ -29,7 +29,7 @@
 			}
 		@show
 		</style>
-
+        <script type="text/javascript" src="{{{ asset('assets/js/jquery-1.9.0.js') }}}"></script>
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -58,6 +58,7 @@
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li {{{ (Request::is('/') ? 'class="active"' : '') }}}><a href="{{{ URL::to('') }}}">Home</a></li>
+							<li {{{ (Request::is('/list') ? 'class="active"' : '') }}}><a href="{{{ URL::to('list') }}}">List Errors</a></li>
 						</ul>
 
 						<ul class="nav pull-right">
@@ -92,7 +93,7 @@
 
 		<!-- Javascripts
 		================================================== -->
-		<script src="{{{ asset('assets/js/jquery.v1.8.3.min.js') }}}"></script>
+
 		<script src="{{{ asset('assets/js/bootstrap/bootstrap.min.js') }}}"></script>
 	</body>
 </html>

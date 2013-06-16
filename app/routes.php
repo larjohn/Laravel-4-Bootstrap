@@ -14,3 +14,8 @@
 
 Route::controller('account','AccountController' );
 Route::get('/', 'HomeController@showIndex');
+Route::get('/list', 'ListController@showIndex');
+Route::group(array('prefix' => 'api'), function()
+{
+    Route::resource('error', 'RDFErrorController');
+});

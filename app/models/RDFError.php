@@ -4,6 +4,15 @@ use Legrand\SPARQLModel;
 class RDFError extends SPARQLModel {
 
     public $hash                    = null;
+
+    public $title;
+    public $significance = "important";
+
+
+    public function __construct($title){
+        $this->title = $title;
+    }
+
     protected static $baseURI       = "http://dbpedia.org/ontology/";
     protected static $type          = "http://www.w3.org/2002/07/owl#Class";
     protected static $mapping       = [
