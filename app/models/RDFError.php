@@ -8,9 +8,25 @@ class RDFError extends SPARQLModel {
     public $title;
     public $significance = "important";
 
+    private $query = '
+CONSTRUCT {
+_:r a <http://spin.org/vialationConstrain> ;
+    <http://dbpedia.org/debug/test>   <http://dbpedia.org/debug/Test-20130617> ;
+    <http://dbpedia.org/debug/queryID> "Wrong ISBN"@en;
+    <http://spin.org/violationRoot> ?s ;
+    dcterms:subject <http://dbpedia.org/debug/skos/Books> ;
+    dcterms:subject <http://dbpedia.org/debug/skos/ErrorInExtraction> ;
+    dcterms:subject <http://dbpedia.org/debug/skos/ErrorInWikipedia> ;
+   <http://dbpedia.org/debug/hasInaccurateProperty> dbpedia-owl:isbn .
+}
+WHERE {
+?s dbpedia-owl:isbn ?value .
+FILTER (! regex(str(?value), "^([iIsSbBnN 0-9-])*$"))
+} limit 5
+';
 
-    public function __construct($title){
-        $this->title = $title;
+    public function __construct(){
+       // $this->title = $title;
     }
 
     protected static $baseURI       = "http://dbpedia.org/ontology/";
@@ -41,5 +57,9 @@ class RDFError extends SPARQLModel {
     {
      //   if(!isset($this->performed)) $this->performed = date('Y-m-d H:i:s', time());
         parent::save($moreData);
+    }
+
+    public function testQ(){
+        $this->listingFromQuery($this->query);
     }
 }

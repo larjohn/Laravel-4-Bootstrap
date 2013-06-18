@@ -20,7 +20,8 @@ class HomeController extends BaseController {
         $error =  RDFError::find("ArchitecturalStructure");
 
        // var_dump($error->label);
-        var_dump($error->listing("domain"));
+        //var_dump($error->listing("domain"));
+        $error->testQ();
 		return View::make('home');
 	}
 
