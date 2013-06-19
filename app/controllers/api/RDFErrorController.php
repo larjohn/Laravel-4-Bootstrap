@@ -11,15 +11,19 @@ class RDFErrorController extends BaseController {
 
     public function index()
     {
-        if(Input::has("significance")){
-            $e2 = new  RDFError("Jenny");
-            return Response::json([$e2]);
+
+       $rdf_errors = RDFError::testQ();
+       $errors = array();
+        foreach ($rdf_errors as $rdf_error) {
+            if(!is_a($rdf_error,"RDFError")) continue;
+            $error= $rdf_error->toArray();
+            $errors[] = $error;
+
         }
-        $e1 = new RDFError("Joe");
-        $e1->significance = "urgent";
-        $e2 = new  RDFError("Jenny");
-        $e3 = new RDFError("James");
-        return Response::json([$e1,$e2,$e3]);
+
+
+
+        return Response::json($errors);
     }
 
 

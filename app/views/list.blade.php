@@ -2,6 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/datatables/jQuery.dataTables.js') }}}"></script>
 <script>
     $.views.settings.delimiters("@%", "%@");
     var error_filters = {};
@@ -17,7 +18,7 @@
             };
             var errorTmpl = $.templates("#errorTmpl");
             errorTmpl.link("#errorsList", app);
-
+            $('#errorsTable').dataTable();
         });
 
     }
@@ -70,6 +71,7 @@
 </script>
 <script src="assets/js/jstree/jquery.jstree.js" type="text/javascript"></script>
 <link href="assets/css/jstree/themes/default/style.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="assets/css/datatables/jQuery.dataTables.css" media="screen" rel="stylesheet" type="text/css"/>
 
 
 <script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
@@ -201,13 +203,20 @@
 
                 @%for errors%@
                 <tr>
-                    <td><a href="http://validation.dbpedia.org/test-set/TS_20130815">TS_20130815</a></td>
-                    <td><a href="http://dbpedia.org/resource/A_Hollywood_Star">@%:title%@</a></td>
-                    <td><a href="http://validation.dbpedia.org/test/underageMarriage">Underage Marriage</a></td>
-                    <td><a href="http://dbpedia.org/ontolohy/age">Age</a>&lt;15 and Marital Status = Married</td>
+                    <td><a href="@%:id%@">@%:id%@</a></td>
+                    <td><a href="@%:test[0].id%@">@%:test[0].id%@</a></td>
+                    <td><a href="@%:violationRoot[0].id%@">@%:violationRoot[0].id%@</a></td>
+                    <td><a href="@%:query%@">@%:query%@</a></td>
+
                     <td>
-                        <a class="label label-info" href="http://validation.dbpedia.org/test-types/family">Family</a>
-                        <a class="label label-info" href="http://validation.dbpedia.org/test-types/family">Age</a>
+                        @%for inaccurateProperty%@
+                        <a href="@%:id%@">@%:id%@</a>
+                        @%/for%@
+                    </td>
+                    <td>
+                        @%for subject%@
+                        <a class="label label-info" href="@%:id%@">@%:id%@</a>
+                        @%/for%@
                     </td>
 
                     @%/for%@
@@ -216,9 +225,10 @@
             </script>
 
             <div>
-                <table class="table table-bordered table-bordered table-striped">
+                <table id="errorsTable" class="table table-bordered table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Test Set</th>
                         <th>Resource</th>
                         <th>Test</th>
