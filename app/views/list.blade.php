@@ -2,7 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/datatables/jQuery.dataTables.js') }}}"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/datatables/jquery.dataTables.js') }}}"></script>
 <script>
     $.views.settings.delimiters("@%", "%@");
     var error_filters = {};
@@ -71,7 +71,7 @@
 </script>
 <script src="assets/js/jstree/jquery.jstree.js" type="text/javascript"></script>
 <link href="assets/css/jstree/themes/default/style.css" media="screen" rel="stylesheet" type="text/css"/>
-<link href="assets/css/datatables/jQuery.dataTables.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="assets/css/datatables/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css"/>
 
 
 <script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
