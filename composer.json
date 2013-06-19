@@ -13,6 +13,14 @@
 			"app/tests/TestCase.php"
 		]
 	},
+    "repositories":[
+
+        {
+            "type": "git",
+            "url": "git://github.com/larjohn/sparqlmodel.git"
+        }
+
+    ],
 	"scripts": {
 		"pre-update-cmd": [
 			"php artisan clear-compiled"
