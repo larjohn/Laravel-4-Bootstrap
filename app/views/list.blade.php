@@ -1,33 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
-<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/datatables/jquery.dataTables.js') }}}"></script>
-<script>
-    $.views.settings.delimiters("@%", "%@");
-    var error_filters = {};
-    function fillData() {
-        $.getJSON('api/error', error_filters, function (data) {
+<script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
+<script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
+<script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
 
-            var errors = [];
-            $.each(data, function () {
-                errors.push(this);
-            });
-            var app = {
-                errors: errors
-            };
-            var errorTmpl = $.templates("#errorTmpl");
-            errorTmpl.link("#errorsList", app);
-            $('#errorsTable').dataTable();
-        });
-
-    }
-
-    $(document).ready(function () {
-        fillData();
-    });
-
-</script>
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function () {
@@ -60,7 +37,7 @@
                 error_filters.significance.push($(checked[i]).attr("id"));
             }
 
-            fillData();
+
 
         });
 
@@ -71,7 +48,8 @@
 </script>
 <script src="assets/js/jstree/jquery.jstree.js" type="text/javascript"></script>
 <link href="assets/css/jstree/themes/default/style.css" media="screen" rel="stylesheet" type="text/css"/>
-<link href="assets/css/datatables/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="assets/css/ui.jqgrid.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="assets/css/jquery-ui.css" media="screen" rel="stylesheet" type="text/css"/>
 
 
 <script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
@@ -199,49 +177,10 @@
     <div class="row-fluid">
 
         <div class="span10">
-            <script id="errorTmpl" type="text/x-jsrender">
-
-                @%for errors%@
-                <tr>
-                    <td><a href="@%:id%@">@%:id%@</a></td>
-                    <td><a href="@%:test[0].id%@">@%:test[0].id%@</a></td>
-                    <td><a href="@%:violationRoot[0].id%@">@%:violationRoot[0].id%@</a></td>
-                    <td><a href="@%:query%@">@%:query%@</a></td>
-
-                    <td>
-                        @%for inaccurateProperty%@
-                        <a href="@%:id%@">@%:id%@</a>
-                        @%/for%@
-                    </td>
-                    <td>
-                        @%for subject%@
-                        <a class="label label-info" href="@%:id%@">@%:id%@</a>
-                        @%/for%@
-                    </td>
-
-                    @%/for%@
-                </tr>
-
-            </script>
-
-            <div>
-                <table id="errorsTable" class="table table-bordered table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Test Set</th>
-                        <th>Resource</th>
-                        <th>Test</th>
-                        <th>Erroneous Facts</th>
-                        <th>Tags</th>
-                    </tr>
-                    </thead>
 
 
-                    <tbody id="errorsList">
-                    </tbody>
-                </table>
-            </div>
+            <table id="list"><tr><td></td></tr></table>
+            <div id="pager"></div>
             <!--Body content-->
         </div>
         <div class="span2">

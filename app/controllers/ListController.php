@@ -12,9 +12,10 @@ class ListController extends BaseController {
 
     public function showIndex()
     {
+        $res =  RDFDBpediaResource::find('http://dbpedia.org/resource/Family_Without_a_Name'); // Same as new User::find('http://semreco/person/damien_legrand');
 
 
-        // var_dump($error->label);
+        // var_dump($res->label);
 
         return View::make('list');
     }

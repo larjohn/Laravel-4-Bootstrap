@@ -8,7 +8,8 @@
  */
 use Legrand\SPARQLModel;
 class RDFThing extends SPARQLModel {
-    protected static $type          = "http://owl.net/Thing";
+
+    protected static $type          = "http://www.w3.org/2002/07/owl#Thing";
 }
 
 RDFThing::init();

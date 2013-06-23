@@ -2,8 +2,8 @@
 
 return array(
 
-    'endpoint' => 'http://dbpedia.org/sparql',
-    'graph' => 'http://dbpedia.org/resource/classes#',
+    'endpoint' => 'http://mlode-sparql.nlp2rdf.org/sparql',
+    'graph' => 'http://debug.dbpedia.org/',
 
     'status' => 'http://uri.for/property/status',
     'created' => 'http://uri.for/property/created',

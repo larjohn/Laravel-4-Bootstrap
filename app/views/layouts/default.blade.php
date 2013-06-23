@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="metamin">
 	<head>
 		<!-- Basic Page Needs
 		================================================== -->
@@ -19,8 +19,10 @@
 
 		<!-- CSS
 		================================================== -->
-		<link href="{{{ asset('assets/css/bootstrap.css') }}}" rel="stylesheet">
-		<link href="{{{ asset('assets/css/bootstrap-responsive.css') }}}" rel="stylesheet">
+        <link href="{{{ asset('assets/css/application/application.css') }}}" rel="stylesheet">
+        <link href="{{{ asset('assets/css/metro-bootstrap.css') }}}" rel="stylesheet">
+
+		<link href="{{{ asset('assets/css/font-awesome/css/font-awesome.css') }}}" rel="stylesheet">
 
 		<style>
 		@section('styles')
@@ -46,7 +48,7 @@
 
 	<body>
 		<!-- Navbar -->
-		<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
 					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">

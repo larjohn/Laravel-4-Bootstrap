@@ -6,24 +6,18 @@ class RDFError extends SPARQLModel {
     public $hash                    = null;
 
 
-
-
     private static  $tquery = '
-CONSTRUCT {
-_:r a <http://spin.org/vialationConstrain> ;
-    <http://dbpedia.org/debug/test>   <http://dbpedia.org/debug/Test-20130617> ;
-    <http://dbpedia.org/debug/queryID> "Wrong ISBN"@en;
-    <http://spin.org/violationRoot> ?s ;
-    dcterms:subject <http://dbpedia.org/debug/skos/Books> ;
-    dcterms:subject <http://dbpedia.org/debug/skos/ErrorInExtraction> ;
-    dcterms:subject <http://dbpedia.org/debug/skos/ErrorInWikipedia> ;
-   <http://dbpedia.org/debug/hasInaccurateProperty> dbpedia-owl:isbn .
+construct {
+?s ?p ?a
 }
 WHERE {
-?s dbpedia-owl:isbn ?value .
-FILTER (! regex(str(?value), "^([iIsSbBnN 0-9-])*$"))
-} limit 30
+
+?s a <http://spinrdf.org/spin#ConstraintViolation>.
+?s ?p ?a.
+} limit 100
 ';
+
+
 
     public function __construct(){
        // $this->title = $title;
@@ -32,9 +26,9 @@ FILTER (! regex(str(?value), "^([iIsSbBnN 0-9-])*$"))
 
 
     protected static $baseURI       = "http://dbpedia.org/ontology/";
-    protected static $type          = "http://www.w3.org/2002/07/owl#Class";
+    protected static $type          = "http://spinrdf.org/spin#ConstraintViolation";
     protected static $mapping       = [
-        'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
+       // 'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
         'http://dbpedia.org/debug/queryID' => 'query',
      //   'http://semreco/property/performed' => 'performed'
     ];
@@ -47,13 +41,13 @@ FILTER (! regex(str(?value), "^([iIsSbBnN 0-9-])*$"))
             'mapping' => 'RDFSubject', //should be the name of the corresponding class
             'inverse' => false,
         ],
-        "http://spin.org/violationRoot" => [
+        "http://spinrdf.org/spin#violationRoot" => [
             'property' => 'violationRoot',
-            'mapping' => 'RDFThing', //should be the name of the corresponding class
+            'mapping' => 'RDFDBpediaResource', //should be the name of the corresponding class
             'inverse' => false,
         ],
 
-        "http://dbpedia.org/debug/hasInaccurateProperty" => [
+        "http://spinrdf.org/spin#violationPath" => [
             'property' => 'inaccurateProperty',
             'mapping' => 'RDFProperty', //should be the name of the corresponding class
             'inverse' => false,
@@ -80,8 +74,9 @@ FILTER (! regex(str(?value), "^([iIsSbBnN 0-9-])*$"))
         parent::save($moreData);
     }
 
-    public static  function testQ(){
-        return self::listingFromQuery(self::$tquery);
+    public static  function getAll($page=0, $perPage = 10){
+        $query = "DESCRIBE ?uri {?uri a <".self::$type.">} LIMIT ". $perPage. " OFFSET ".$page*$perPage;
+        return self::listingFromQuery($query);
     }
 }
 RDFError::init();
