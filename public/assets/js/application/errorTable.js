@@ -5,6 +5,17 @@ function tagsFormatter(cellvalue, options, rowObject){
     return cellvalue[0].id;
 }
 $(document).ready(function () {
+
+    jQuery.ajaxSetup({
+        dataFilter: function(data, dataType) {
+            var obj = jQuery.parseJSON(data);
+            console.log(obj.page);
+            return data;
+        }
+    });
+
+
+
     $("#list").jqGrid({
         url: "api/error",
         height:'auto',

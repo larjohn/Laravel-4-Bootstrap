@@ -12,12 +12,14 @@ class RDFErrorController extends BaseController
 
     public function index()
     {
-
-        $r = new RDFDBpediaResource();
-
         $limit = Input::get('rows', 10);
         $page =  Input::get('page', 0);
-        $rdf_objects = RDFError::getAll($page,$limit);
+        $sort = Input::get('sidx', "");
+        $order = Input::get('sord', "asc");
+        $sortProperties = self::getSorter($sort);
+        $collection = new RDFErrorCollection();
+        $all = $collection->getAll($page,$limit, $sortProperties,$order);
+        $rdf_objects = $all["data"];
         $rdf_errors = array();
         $errors = array();
         $dbpedia_resources = array();
@@ -48,10 +50,10 @@ class RDFErrorController extends BaseController
             $errors[] = $error;
 
         }
-$count = 500;
+        $count = $all["count"];
         $output = array(
             "page"=>$page,
-            "total"=>ceil($count/$limit),
+            "total"=>ceil($count/$limit)-1,
             "records"=>$count,
             "errors"=>$errors,
 
@@ -60,6 +62,18 @@ $count = 500;
         return Response::json($output);
     }
 
+
+    private static function getSorter($sidx){
+        $sortProperties = explode( ".",$sidx);
+
+        foreach ($sortProperties as $k=>$value) {
+            if(is_numeric($value))
+                unset($sortProperties[$k]);
+        }
+
+        return $sortProperties;
+
+    }
 
 
 

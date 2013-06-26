@@ -1,7 +1,8 @@
 <?php
 use Legrand\SPARQLModel;
-
-class RDFError extends SPARQLModel {
+use Legrand\SPARQL;
+use Base\RDFModel;
+class RDFError extends RDFModel {
 
     public $hash                    = null;
 
@@ -59,6 +60,8 @@ WHERE {
         ],
     ];
 
+
+
     protected static $status        = false;
 
     public function generateID()
@@ -68,15 +71,13 @@ WHERE {
         return self::$baseURI . $this->hash;
     }
 
+
+
     public function save($moreData=[])
     {
      //   if(!isset($this->performed)) $this->performed = date('Y-m-d H:i:s', time());
         parent::save($moreData);
     }
 
-    public static  function getAll($page=0, $perPage = 10){
-        $query = "DESCRIBE ?uri {?uri a <".self::$type.">} LIMIT ". $perPage. " OFFSET ".$page*$perPage;
-        return self::listingFromQuery($query);
-    }
 }
 RDFError::init();
