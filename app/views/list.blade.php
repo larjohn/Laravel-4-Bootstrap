@@ -1,6 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
+<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
 <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
@@ -77,7 +78,7 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
-        <h1 class="page-header">Validation Errors</h1>
+        <h1 class="page-header">DBpedia Validation Errors</h1>
 
         <div id="search_box_container"></div>
         <div id="search_query">&nbsp;</div>
@@ -176,29 +177,32 @@
     </div>
     <div class="row-fluid">
 
-        <div class="span10">
+        <div class="span9">
 
 
             <table id="list"><tr><td></td></tr></table>
             <div id="pager"></div>
             <!--Body content-->
         </div>
-        <div class="span2">
-            <div id="significance-tree">
-                <ul>
-                    <li>
-                        <a href="#">Significance</a>
-                        <!-- UL node only needed for children - omit if there are no children -->
-                        <ul>
-                            <li id="important"><a href="important">Important (3)</a></li>
-                            <li id="very_important"><a href="very_important">Very Important (11)</a></li>
-                            <li id="urgent"><a href="urgent">Urgent (1)</a></li>
-                            <!-- Children LI nodes here -->
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+        <div class="span3 text-right" id="facets">
 
+            <script id="facetTmpl" type="text/x-jsrender">
+
+                @%for facets%@
+                <div class="row-fluid">
+                    <h4>@%:title%@</h4>
+                    <div class="span12">
+                        @%for elements%@
+                        <div class="row-fluid">
+                        <a class="facet-item" href="#" data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a> <span class="badge badge-info">@%:count%@</span>
+                            </div>
+                        @%/for%@
+                    </div>
+                </div>
+                @%/for%@
+
+
+            </script>
             <!--Sidebar content-->
         </div>
     </div>

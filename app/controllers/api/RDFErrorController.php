@@ -9,16 +9,29 @@
 
 class RDFErrorController extends BaseController
 {
+    public function getFacets(){
 
-    public function index()
+
+        $collection = new RDFErrorCollection();
+        $facets = $collection->getFacets();
+        return Response::json($facets);
+
+    }
+
+    public function getIndex()
     {
         $limit = Input::get('rows', 10);
         $page =  Input::get('page', 0);
         $sort = Input::get('sidx', "");
         $order = Input::get('sord', "asc");
+        $filters = Input::get('filters', array());
+//var_dump($filters);
         $sortProperties = self::getSorter($sort);
         $collection = new RDFErrorCollection();
+        $collection->setFilters($filters);
         $all = $collection->getAll($page,$limit, $sortProperties,$order);
+
+        $facets = $collection->getFacets();
         $rdf_objects = $all["data"];
         $rdf_errors = array();
         $errors = array();
@@ -56,6 +69,7 @@ class RDFErrorController extends BaseController
             "total"=>ceil($count/$limit)-1,
             "records"=>$count,
             "errors"=>$errors,
+            "facets"=>$facets,
 
         );
 

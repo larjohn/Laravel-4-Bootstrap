@@ -1,3 +1,7 @@
 .ngViewport{
     height: auto!important;
 }
+
+.facet-item.active{
+    font-weight: bold;
+}

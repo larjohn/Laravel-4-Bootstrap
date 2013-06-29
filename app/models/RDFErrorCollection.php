@@ -11,7 +11,7 @@ use Legrand\SPARQL;
 use Base\RDFModel;
 class RDFErrorCollection {
 
-    public static $enabledFacets= array("test","subject","query");
+    public static $enabledFacets= array("query");
 
     protected $currentFilters= array();
 
@@ -21,7 +21,9 @@ class RDFErrorCollection {
 
     public function setFilters($filters=array()){
         foreach ($filters as $filter) {
+
             $this->currentFilters[$filter["name"]] = array(
+                "name"=>$filter["name"],
               "operator"  => $filter["operator"],
               "value"  => $filter["value"],
 
@@ -31,13 +33,39 @@ class RDFErrorCollection {
 
 
     public function getFacets(){
-        $facetCounters = array();
+        $class = "RDFError";
+        $facetResults = array();
         foreach (self::$enabledFacets as $facet) {
             $sparql = new SPARQL();
             $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
             $sparql->select(SPARQLModel::getConfig('sparqlmodel.graph'));
+            $var = $facet;
+            $property_uri = $class::getUriFromProperty($facet);
+            $sparql->variable("?".$var);
+            $sparql->variable("count(?".$var.") as ?count");
+            $sparql->where("?uri","<".$property_uri.">","?".$var);
+
+            $this->applyFilters($sparql);
+            $sparql->orderBy("?count","desc");
+            $data = $sparql->launch();
+
+
+            $facetArray = array();
+            $facetArray["title"]= $var;
+            foreach($data["results"]["bindings"] as $fct){
+
+                $facetArray["elements"][]=array(
+                    "value"=>$fct[$var]["value"],
+                    "label"=>$fct[$var]["value"],
+                    "count"=>$fct["count"]["value"],
+                );
+            }
+
+            $facetResults[$var]= $facetArray;
         }
 
+
+        return $facetResults;
     }
 
     private function applyFilters($sparql){
@@ -45,8 +73,15 @@ class RDFErrorCollection {
         foreach ($this->currentFilters as $filter) {
             $propertyUri = $class::getUriFromProperty($filter["name"]);
             if($propertyUri=="")continue;
-            ///an einai apli tripleta, alliws theloume kai filter 
-            $sparql->where('?uri', "<".$propertyUri.">",  "?".$filter["name"]);
+            if(isset($class::getMultiMapping()[$propertyUri])){
+                $sparql->where('?uri', "<".$propertyUri.">",  "?".$filter["value"]);
+            }
+            else{
+                $sparql->where('?uri', "<".$propertyUri.">",  "?".$filter["name"]);
+                $sparql->filter("str(?".$filter["name"].") ".$filter["operator"]." '".$filter["value"]."'"   );
+
+            }
+
         }
 
     }
@@ -59,6 +94,8 @@ class RDFErrorCollection {
 
         $sparql->variable('count(?uri)');
         $sparql->where('?uri', 'a',  "<".RDFError::getType().">");
+        $this->applyFilters($sparql);
+
         $data = $sparql->launch();
         foreach($data["results"]["bindings"][0] as $callret){
             return $callret["value"];
@@ -100,6 +137,7 @@ class RDFErrorCollection {
 
             if($ordered)$sparql->orderBy("?".$sorter, $sortOrder);
         }
+        $this->applyFilters($sparql);
         $sparql->limit($perPage);
         $sparql->offset($page*$perPage);
         $count = self::getCount();

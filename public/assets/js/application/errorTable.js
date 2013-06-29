@@ -4,7 +4,29 @@ var error_filters = {};
 function tagsFormatter(cellvalue, options, rowObject){
     return cellvalue[0].id;
 }
+$.views.settings.delimiters("@%", "%@");
+
+function fillData() {
+    $.getJSON('api/error/facets', error_filters, function (data) {
+
+        var facets = [];
+        $.each(data, function () {
+            facets.push(this);
+        });
+        var app = {
+            facets: facets
+        };
+        var facetsTemplate = $.templates("#facetTmpl");
+        facetsTemplate.link("#facets", app);
+
+    });
+
+}
+
+
 $(document).ready(function () {
+
+    fillData();
 
     jQuery.ajaxSetup({
         dataFilter: function(data, dataType) {
@@ -14,12 +36,17 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", '.facet-item',function(event){
 
+        $(event.target).toggleClass("active");
+        error_filters[$(event.target).attr("data-facet")]={name:$(event.target).attr("data-facet"), operator:"=", value: $(event.target).attr("data-facet-value")};
+        $('#list').setGridParam({ postData: {filters:error_filters} }).trigger( 'reloadGrid' );
+    });
 
     $("#list").jqGrid({
         url: "api/error",
         height:'auto',
-        width:"100%",
+        autowidth: true,
         datatype: "json",
         mtype: "GET",
         colNames: ["Identifier", "Resource", "Property", "test set", "query", "tags"],

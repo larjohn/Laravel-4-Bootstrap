@@ -20,6 +20,7 @@
 		<!-- CSS
 		================================================== -->
         <link href="{{{ asset('assets/css/application/application.css') }}}" rel="stylesheet">
+        <link href="{{{ asset('assets/css/bootstrap.css') }}}" rel="stylesheet">
         <link href="{{{ asset('assets/css/metro-bootstrap.css') }}}" rel="stylesheet">
 
 		<link href="{{{ asset('assets/css/font-awesome/css/font-awesome.css') }}}" rel="stylesheet">

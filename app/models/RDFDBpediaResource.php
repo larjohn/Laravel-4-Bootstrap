@@ -16,17 +16,13 @@ class RDFDBpediaResource extends SPARQLModel {
 
             case 'sparqlmodel.endpoint':{
                  return 'http://dbpedia.org/sparql';
-
             }
             case 'sparqlmodel.graph':{
                 return 'http://dbpedia.org';
-
             }
             default:{
                 return Config::get($setting);
             }
-
-
         }
 
     }
