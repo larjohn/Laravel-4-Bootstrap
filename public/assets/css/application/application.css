@@ -2,6 +2,25 @@
     height: auto!important;
 }
 
-.facet-item.active{
+.facet-item.selected{
     font-weight: bold;
+}
+
+.facet.active .facet-item{
+    opacity: .5;
+}
+
+.revert{
+    display: none;
+}
+#facets a{
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.facet.active .revert{
+    display: inline;
+}
+.facet.active .facet-item.selected{
+    opacity: 1;
 }

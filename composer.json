@@ -18,7 +18,12 @@
         {
             "type": "git",
             "url": "git://github.com/larjohn/sparqlmodel.git"
-        }
+        },
+         {
+            "type": "git",
+            "url": "git://github.com/larjohn/sparql-php.git"
+        },
+
 
     ],
 	"scripts": {

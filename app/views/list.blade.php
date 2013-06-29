@@ -189,12 +189,12 @@
             <script id="facetTmpl" type="text/x-jsrender">
 
                 @%for facets%@
-                <div class="row-fluid">
-                    <h4>@%:title%@</h4>
+                <div class="row-fluid facet">
+                    <h4><a class="revert" data-facet="@%:title%@"><i  class="icon-undo"></i></a> @%:title%@ </h4>
                     <div class="span12">
                         @%for elements%@
-                        <div class="row-fluid">
-                        <a class="facet-item" href="#" data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a> <span class="badge badge-info">@%:count%@</span>
+                        <div class="row-fluid facet-item">
+                        <a  data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a> <span class="badge badge-info">@%:count%@</span>
                             </div>
                         @%/for%@
                     </div>

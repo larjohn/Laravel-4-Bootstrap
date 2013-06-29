@@ -20,8 +20,8 @@ class RDFErrorCollection {
     }
 
     public function setFilters($filters=array()){
-        foreach ($filters as $filter) {
-
+        foreach ($filters as $key=>$filter) {
+            if($key=='undefined')continue;
             $this->currentFilters[$filter["name"]] = array(
                 "name"=>$filter["name"],
               "operator"  => $filter["operator"],
