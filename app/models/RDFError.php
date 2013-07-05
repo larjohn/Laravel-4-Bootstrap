@@ -26,7 +26,7 @@ WHERE {
 
 
 
-    protected static $baseURI       = "http://dbpedia.org/ontology/";
+    protected static $baseURI       = "nodeID://";
     protected static $type          = "http://spinrdf.org/spin#ConstraintViolation";
     protected static $mapping       = [
        // 'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
@@ -61,7 +61,7 @@ WHERE {
     ];
 
 
-
+    public $value;
     protected static $status        = false;
 
     public function generateID()
@@ -77,6 +77,46 @@ WHERE {
     {
      //   if(!isset($this->performed)) $this->performed = date('Y-m-d H:i:s', time());
         parent::save($moreData);
+    }
+
+    public function load_value(){
+        $sparql = new SPARQL();
+        $sparql->baseUrl = RDFDBpediaResource::getConfig('sparqlmodel.endpoint');
+        $sparql->select(RDFDBpediaResource::getConfig('sparqlmodel.graph'));
+        $sparql->variable("?offender");
+        $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$this->inaccurateProperty[0]->identifier.">","?offender");
+
+        $data = $sparql->launch();
+        $this->value = $data["results"]["bindings"][0]["offender"]["value"];
+
+
+    }
+
+    public function toArray($expand = false){
+        $arr = parent::toArray($expand);
+        $arr["value"]=$this->value;
+        return $arr;
+    }
+
+    public static function findTriple($resource, $property, $test, $query){
+        $sparql = new SPARQL();
+        $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
+        $sparql->describe(SPARQLModel::getConfig('sparqlmodel.graph'));
+        $sparql->variable("?uri");
+        $sparql->where('?uri', 'a',  "<".RDFError::getType().">");
+        $sparql->where("?uri", "<http://spinrdf.org/spin#violationRoot>" ,"<".$resource.">");
+        $sparql->where("?uri", "<http://spinrdf.org/spin#violationPath>" ,"<".$property.">");
+        $sparql->where("?uri", "<http://dbpedia.org/debug/test>" ,"<".$test.">");
+        $sparql->where("?uri", "<http://dbpedia.org/debug/queryID>" ,"'".$query."'@en");
+
+        $objects = self::listingFromQuery($sparql, $forProperty = false);
+
+        $error = array_filter($objects, function($a){
+            if(is_a($a,"RDFError")) return $a;
+        });
+
+        return reset($error);
+
     }
 
 }

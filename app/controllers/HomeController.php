@@ -21,7 +21,7 @@ class HomeController extends BaseController {
 
        // var_dump($error->label);
         //var_dump($error->listing("domain"));
-        $error->testQ();
+
 		return View::make('home');
 	}
 

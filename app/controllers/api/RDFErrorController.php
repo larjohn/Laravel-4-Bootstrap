@@ -18,6 +18,11 @@ class RDFErrorController extends BaseController
 
     }
 
+    public function getList(){
+        return $this->getIndex();
+    }
+
+
     public function getIndex()
     {
         $limit = Input::get('rows', 10);
@@ -73,7 +78,25 @@ class RDFErrorController extends BaseController
 
         );
 
+
         return Response::json($output);
+    }
+
+
+    public function getItem(){
+        $resource = Input::get('resource', "");
+        $property = Input::get('property', "");
+        $test = Input::get('test', "");
+        $query = Input::get('query', "");
+        $rdf_error =  RDFError::findTriple($resource,$property,$test,$query);
+
+        if($rdf_error) $rdf_error->load_value();
+
+        $error = $rdf_error->toArray();
+
+        return Response::json($error);
+
+
     }
 
 

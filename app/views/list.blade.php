@@ -2,6 +2,10 @@
 
 @section('content')
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/backbone-0.9.10.js') }}}"></script>
+<script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
 <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
@@ -30,14 +34,13 @@
 
         $("#significance-tree").bind("change_state.jstree", function (event, data) {
 
-            var tree = jQuery.jstree._reference ($("#significance-tree"));
-            var checked  = tree.get_checked(undefined,true);
+            var tree = jQuery.jstree._reference($("#significance-tree"));
+            var checked = tree.get_checked(undefined, true);
             error_filters.significance = [];
-            for(var i=0; i<checked.length; i++){
+            for (var i = 0; i < checked.length; i++) {
 
                 error_filters.significance.push($(checked[i]).attr("id"));
             }
-
 
 
         });
@@ -53,8 +56,6 @@
 <link href="assets/css/jquery-ui.css" media="screen" rel="stylesheet" type="text/css"/>
 
 
-<script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/backbone-0.9.10.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.core.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.widget.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.autocomplete.js') }}}"></script>
@@ -62,7 +63,6 @@
 <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.menu.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/backbone_extensions.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/jquery_extensions.js') }}}"></script>
-
 
 
 <script src="assets/js/visualsearch/visualsearch.js" type="text/javascript"></script>
@@ -74,6 +74,25 @@
 <!--[if lte IE 7]><!-->
 <link href="assets/css/visualsearch/visualsearch.css" media="screen" rel="stylesheet" type="text/css"/>
 <!--<![endif]-->
+
+<!-- Modal -->
+<script id="facetTmpl" type="text/x-jsrender">
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Modal header</h3>
+        </div>
+        <div class="modal-body">
+            <span>Resource: </span>
+            <span>@%:violationRoot%@</span>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+</script>
 
 
 <div class="container-fluid">
@@ -177,10 +196,14 @@
     </div>
     <div class="row-fluid">
 
-        <div class="span9">
+        <div class="span9" id="errors-span">
 
 
-            <table id="list"><tr><td></td></tr></table>
+            <table id="list">
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
             <div id="pager"></div>
             <!--Body content-->
         </div>
@@ -190,12 +213,14 @@
 
                 @%for facets%@
                 <div class="row-fluid facet">
-                    <h4><a class="revert" data-facet="@%:title%@"><i  class="icon-undo"></i></a> @%:title%@ </h4>
+                    <h4><a class="revert" data-facet="@%:title%@"><i class="icon-undo"></i></a> @%:title%@ </h4>
+
                     <div class="span12">
                         @%for elements%@
                         <div class="row-fluid facet-item">
-                        <a  data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a> <span class="badge badge-info">@%:count%@</span>
-                            </div>
+                            <a data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a>
+                            <span class="badge badge-info">@%:count%@</span>
+                        </div>
                         @%/for%@
                     </div>
                 </div>

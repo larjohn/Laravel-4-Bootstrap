@@ -24,6 +24,27 @@ function fillData() {
 }
 
 
+function loadError(resource, property, query, test){
+
+    var error_id = {
+        resource: resource,
+        property: property,
+        test:test,
+        query:query
+    };
+
+    $.getJSON('api/error/item', error_id, function (data) {
+
+
+        var app = {
+            item: data
+        };
+        var itemTemplate = $.templates("#itemTmpl");
+        itemTemplate.link("#facets", app);
+
+    });
+}
+
 $(document).ready(function () {
 
     fillData();
@@ -31,12 +52,18 @@ $(document).ready(function () {
     jQuery.ajaxSetup({
         dataFilter: function(data, dataType) {
             var obj = jQuery.parseJSON(data);
-            console.log(obj.page);
             return data;
         }
     });
 
-    $(document).on("click", '.revert',function(event){
+    $(document).on("click", '.view-item',function(event){
+
+        var rowId = $(event.target).attr("data-row");
+        var row = $("#list").getLocalRow(rowId);
+    });
+
+
+        $(document).on("click", '.revert',function(event){
 
         $(event.target).parents(".facet").toggleClass("active",false);
         $(event.target).parents(".facet").find(".facet-item").toggleClass("selected",false);
@@ -62,8 +89,15 @@ $(document).ready(function () {
         mtype: "GET",
         colNames: ["Identifier", "Resource", "Property",  "query", "tags"],
         colModel: [
-            { name: "id" },
-            { name: "violationRoot.0.label" },
+            { name: "view", formatter: function(cellvalue, options, rowObject){
+                return '<a href="#myModal" role="button" class="btn view-item" data-row="'+options.rowId+'" data-toggle="modal">Launch demo modal</a>';
+            } },
+            { name: "violationRoot.0.id", formatter: function(cellvalue, options, rowObject){
+                var decoded = decodeURIComponent(cellvalue);
+                var abbr =  VIE.Util.toCurie("<"+decoded+">",false,namespaces);
+                return "<span title='"+rowObject.violationRoot[0].label+"'>"+abbr+"</span><a href='"+decoded+"' title='"+rowObject.violationRoot[0].label+"' target='_blank'>   <i class='icon-external-link'></i> </a>"
+
+            } },
             { name: "inaccurateProperty.0.label", align: "right" },
            // { name: "test.0.id",  align: "right" },
             { name: "query",  align: "right" },

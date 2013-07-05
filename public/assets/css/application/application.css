@@ -24,3 +24,15 @@
 .facet.active .facet-item.selected{
     opacity: 1;
 }
+
+#errors-span .ui-jqgrid .ui-jqgrid-pager{
+    height: auto;
+}
+
+#errors-span .ui-jqgrid .ui-pg-selbox, #errors-span .ui-jqgrid .ui-pg-input{
+    height: auto;
+}
+
+.ui-jqgrid .ui-state-highlight {
+    border: inherit;
+}
