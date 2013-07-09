@@ -1,5 +1,7 @@
 
 var error_filters = {};
+var data_page = {};
+
 
 function tagsFormatter(cellvalue, options, rowObject){
     return cellvalue[0].id;
@@ -8,7 +10,6 @@ $.views.settings.delimiters("@%", "%@");
 
 function fillData() {
     $.getJSON('api/error/facets', error_filters, function (data) {
-
         var facets = [];
         $.each(data, function () {
             facets.push(this);
@@ -18,9 +19,7 @@ function fillData() {
         };
         var facetsTemplate = $.templates("#facetTmpl");
         facetsTemplate.link("#facets", app);
-
     });
-
 }
 
 
@@ -47,6 +46,17 @@ function loadError(resource, property, query, test){
 
 $(document).ready(function () {
 
+    $.views.converters("curie", function(val) {
+        var decoded = decodeURIComponent(val);
+        try{
+            return VIE.Util.toCurie("<"+decoded+">",false,namespaces);
+        }
+        catch(err) {
+            return val;
+        }
+    });
+
+
     fillData();
 
     jQuery.ajaxSetup({
@@ -59,7 +69,12 @@ $(document).ready(function () {
     $(document).on("click", '.view-item',function(event){
 
         var rowId = $(event.target).attr("data-row");
-        var row = $("#list").getLocalRow(rowId);
+
+        var errorsTemplate = $.templates("#itemTmpl");
+        errorsTemplate.link("#errorModal", data_page.errors[rowId-1]);
+        $("#errorModal").modal({});
+
+
     });
 
 
@@ -87,10 +102,10 @@ $(document).ready(function () {
         autowidth: true,
         datatype: "json",
         mtype: "GET",
-        colNames: ["Identifier", "Resource", "Property",  "query", "tags"],
+        colNames: ["Identifier", "Resource", "Property",  "query"],
         colModel: [
             { name: "view", formatter: function(cellvalue, options, rowObject){
-                return '<a href="#myModal" role="button" class="btn view-item" data-row="'+options.rowId+'" data-toggle="modal">Launch demo modal</a>';
+                return '<a href="#myModal" role="button" class="btn view-item" data-row="'+options.rowId+'" data-resource="'+rowObject.violationRoot[0].id+'" data-property="'+rowObject.inaccurateProperty[0].id+'" data-test="'+rowObject.test[0].id+'"  data-query="'+rowObject.query+'"    data-toggle="modal">Details</a>';
             } },
             { name: "violationRoot.0.id", formatter: function(cellvalue, options, rowObject){
                 var decoded = decodeURIComponent(cellvalue);
@@ -100,8 +115,8 @@ $(document).ready(function () {
             } },
             { name: "inaccurateProperty.0.label", align: "right" },
            // { name: "test.0.id",  align: "right" },
-            { name: "query",  align: "right" },
-            { name: "subject", sortable: false,formatter:tagsFormatter  }
+            { name: "query",  align: "right" }
+
         ],
         jsonReader : {
             root:"errors",
@@ -110,6 +125,9 @@ $(document).ready(function () {
             records: "records",
             cell: "",
             id: "0"
+        },
+        loadComplete:function(data){
+            data_page = data;
         },
         pager: "#pager",
         rowNum: 10,

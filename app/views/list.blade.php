@@ -76,22 +76,46 @@
 <!--<![endif]-->
 
 <!-- Modal -->
-<script id="facetTmpl" type="text/x-jsrender">
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-header">
+<div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                      aria-hidden="true">
+</div>
+<script id="itemTmpl" type="text/x-jsrender">
+         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Modal header</h3>
+            <h3 id="myModalLabel">Validation Error Details</h3>
         </div>
         <div class="modal-body">
-            <span>Resource: </span>
-            <span>@%:violationRoot%@</span>
+            <dl>
+                <dd>Resource:</dd>
+                <dt>@%curie:violationRoot[0].id%@</dt>
+            </dl>
+            <dl>
+                <dd>Property:</dd>
+                <dt>@%:inaccurateProperty[0].label%@</dt>
+            </dl>
+            <dl>
+                <dd>Test:</dd>
+                <dt>@%:test[0].id%@</dt>
+            </dl>
+            <dl>
+                <dd>Query:</dd>
+                <dt>@%:query[0]%@</dt>
+            </dl>
+            <dl>
+                <dd>Tags:</dd>
+                <dt>
+                    @%for subject%@
+                    @%curie:id%@
+                    @%/for%@
+                </dt>
+            </dl>
+
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <button class="btn btn-primary">Save changes</button>
         </div>
-    </div>
+
 </script>
 
 
