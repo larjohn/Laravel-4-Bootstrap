@@ -102,7 +102,7 @@
                 <dd>Property:</dd>
                 <dt>@%curie:inaccurateProperty[0].id%@</dt>
             </dl>
-            <dl>
+            <dl class="alert alert-error">
                 <dd>Value:</dd>
                 <dt>@%:value%@</dt>
             </dl>
