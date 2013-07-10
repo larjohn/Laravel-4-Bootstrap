@@ -99,6 +99,7 @@ WHERE {
     }
 
     public static function findTriple($resource, $property, $test, $query){
+
         $sparql = new SPARQL();
         $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
         $sparql->describe(SPARQLModel::getConfig('sparqlmodel.graph'));

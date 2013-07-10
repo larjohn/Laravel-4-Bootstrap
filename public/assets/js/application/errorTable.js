@@ -71,8 +71,23 @@ $(document).ready(function () {
         var rowId = $(event.target).attr("data-row");
 
         var errorsTemplate = $.templates("#itemTmpl");
-        errorsTemplate.link("#errorModal", data_page.errors[rowId-1]);
+        var row = data_page.errors[rowId-1];
+        var params = {resource: row.violationRoot[0].id,
+            property:row.inaccurateProperty[0].id,
+            query:row.query[0],
+            test:row.test[0].id
+        }
+
         $("#errorModal").modal({});
+        $("#errorModal").toggleClass('loading', true);
+        $.getJSON('api/error/item', params, function (data) {
+            errorsTemplate.link("#item-modal-content", data);
+            $("#errorModal").toggleClass('loading', false);
+
+
+        });
+
+
 
 
     });
@@ -102,7 +117,7 @@ $(document).ready(function () {
         autowidth: true,
         datatype: "json",
         mtype: "GET",
-        colNames: ["Identifier", "Resource", "Property",  "query"],
+        colNames: ["Actions", "Resource", "Property",  "query"],
         colModel: [
             { name: "view", formatter: function(cellvalue, options, rowObject){
                 return '<a href="#myModal" role="button" class="btn view-item" data-row="'+options.rowId+'" data-resource="'+rowObject.violationRoot[0].id+'" data-property="'+rowObject.inaccurateProperty[0].id+'" data-test="'+rowObject.test[0].id+'"  data-query="'+rowObject.query+'"    data-toggle="modal">Details</a>';

@@ -36,3 +36,13 @@
 .ui-jqgrid .ui-state-highlight {
     border: inherit;
 }
+
+#errorModal.loading #item-modal-content{
+    visibility: hidden;
+}
+#item-loader{
+    visibility: hidden;
+}
+#errorModal.loading #item-loader{
+    visibility: visible;
+}

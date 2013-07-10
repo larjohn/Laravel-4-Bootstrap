@@ -78,7 +78,16 @@
 <!-- Modal -->
 <div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                       aria-hidden="true">
+
+    <div id="item-loader">
+        <i class="icon-spinner icon-spin icon-large"></i>  Loading...
+
+    </div>
+    <div id="item-modal-content">
+
+    </div>
 </div>
+
 <script id="itemTmpl" type="text/x-jsrender">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -91,11 +100,15 @@
             </dl>
             <dl>
                 <dd>Property:</dd>
-                <dt>@%:inaccurateProperty[0].label%@</dt>
+                <dt>@%curie:inaccurateProperty[0].id%@</dt>
+            </dl>
+            <dl>
+                <dd>Value:</dd>
+                <dt>@%:value%@</dt>
             </dl>
             <dl>
                 <dd>Test:</dd>
-                <dt>@%:test[0].id%@</dt>
+                <dt>@%curie:test[0].id%@</dt>
             </dl>
             <dl>
                 <dd>Query:</dd>
