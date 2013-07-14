@@ -17,7 +17,7 @@ class ListController extends BaseController {
 
         // var_dump($res->label);
 
-        return View::make('list');
+        return View::make('list')->with('title',"Errors List");
     }
 
 

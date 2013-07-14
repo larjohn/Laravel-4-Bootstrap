@@ -2,8 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/backbone-0.9.10.js') }}}"></script>
+
 <script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
@@ -53,14 +52,7 @@
 <script src="assets/js/jstree/jquery.jstree.js" type="text/javascript"></script>
 <link href="assets/css/jstree/themes/default/style.css" media="screen" rel="stylesheet" type="text/css"/>
 <link href="assets/css/ui.jqgrid.css" media="screen" rel="stylesheet" type="text/css"/>
-<link href="assets/css/jquery-ui.css" media="screen" rel="stylesheet" type="text/css"/>
 
-
-<script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.core.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.widget.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.autocomplete.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.position.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.menu.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/backbone_extensions.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/jquery_extensions.js') }}}"></script>
 
@@ -77,10 +69,10 @@
 
 <!-- Modal -->
 <div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                      aria-hidden="true">
+     aria-hidden="true">
 
     <div id="item-loader">
-        <i class="icon-spinner icon-spin icon-large"></i>  Loading...
+        <i class="icon-spinner icon-spin icon-large"></i> Loading...
 
     </div>
     <div id="item-modal-content">
@@ -89,52 +81,52 @@
 </div>
 
 <script id="itemTmpl" type="text/x-jsrender">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Validation Error Details</h3>
-        </div>
-        <div class="modal-body">
-            <dl>
-                <dd>Resource:</dd>
-                <dt>@%curie:violationRoot[0].id%@</dt>
-            </dl>
-            <dl>
-                <dd>Property:</dd>
-                <dt>@%curie:inaccurateProperty[0].id%@</dt>
-            </dl>
-            <dl class="alert alert-error">
-                <dd>Value:</dd>
-                <dt>@%:value%@</dt>
-            </dl>
-            <dl>
-                <dd>Test:</dd>
-                <dt>@%curie:test[0].id%@</dt>
-            </dl>
-            <dl>
-                <dd>Query:</dd>
-                <dt>@%:query[0]%@</dt>
-            </dl>
-            <dl>
-                <dd>Tags:</dd>
-                <dt>
-                    @%for subject%@
-                    @%curie:id%@
-                    @%/for%@
-                </dt>
-            </dl>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Error Details</h3>
+    </div>
+    <div class="modal-body">
+        <dl>
+            <dd>Resource:</dd>
+            <dt>@%curie:violationRoot[0].id%@</dt>
+        </dl>
+        <dl>
+            <dd>Property:</dd>
+            <dt>@%curie:inaccurateProperty[0].id%@</dt>
+        </dl>
+        <dl class="alert alert-error">
+            <dd>Value:</dd>
+            <dt>@%:value%@</dt>
+        </dl>
+        <dl>
+            <dd>Test:</dd>
+            <dt>@%curie:test[0].id%@</dt>
+        </dl>
+        <dl>
+            <dd>Query:</dd>
+            <dt>@%:query[0]%@</dt>
+        </dl>
+        <dl>
+            <dd>Tags:</dd>
+            <dt>
+                @%for subject%@
+                @%curie:id%@
+                @%/for%@
+            </dt>
+        </dl>
 
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary">Save changes</button>
-        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary">Save changes</button>
+    </div>
 
 </script>
 
 
 <div class="container-fluid">
     <div class="row-fluid">
-        <h1 class="page-header">DBpedia Validation Errors</h1>
+        <h1 class="page-header">Validation Errors List</h1>
 
         <div id="search_box_container"></div>
         <div id="search_query">&nbsp;</div>
@@ -237,9 +229,7 @@
 
 
             <table id="list">
-                <tr>
-                    <td></td>
-                </tr>
+
             </table>
             <div id="pager"></div>
             <!--Body content-->

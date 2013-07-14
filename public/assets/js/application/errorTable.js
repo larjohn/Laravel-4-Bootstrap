@@ -120,7 +120,7 @@ $(document).ready(function () {
         colNames: ["Actions", "Resource", "Property",  "query"],
         colModel: [
             { name: "view", formatter: function(cellvalue, options, rowObject){
-                return '<a href="#myModal" role="button" class="btn view-item" data-row="'+options.rowId+'" data-resource="'+rowObject.violationRoot[0].id+'" data-property="'+rowObject.inaccurateProperty[0].id+'" data-test="'+rowObject.test[0].id+'"  data-query="'+rowObject.query+'"    data-toggle="modal">Details</a>';
+                return '<a href="#myModal" role="button" class="btn btn-info view-item" data-row="'+options.rowId+'" data-resource="'+rowObject.violationRoot[0].id+'" data-property="'+rowObject.inaccurateProperty[0].id+'" data-test="'+rowObject.test[0].id+'"  data-query="'+rowObject.query+'"    data-toggle="modal">Details</a>';
             } },
             { name: "violationRoot.0.id", formatter: function(cellvalue, options, rowObject){
                 var decoded = decodeURIComponent(cellvalue);

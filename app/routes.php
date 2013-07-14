@@ -14,7 +14,7 @@
 
 Route::controller('account','AccountController' );
 Route::get('/', 'HomeController@showIndex');
-Route::get('/list', 'ListController@showIndex');
+Route::get('/list', array("as"=>"list", "uses"=>'ListController@showIndex'));
 
 Route::group(array('prefix' => 'api'), function()
 {

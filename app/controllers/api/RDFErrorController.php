@@ -108,6 +108,7 @@ class RDFErrorController extends BaseController
                 unset($sortProperties[$k]);
         }
 
+
         return $sortProperties;
 
     }

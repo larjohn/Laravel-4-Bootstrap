@@ -46,3 +46,7 @@
 #errorModal.loading #item-loader{
     visibility: visible;
 }
+
+ul.breadcrumb{
+    display: inline;
+}

@@ -1,7 +1,8 @@
 {
 	"require": {
 		"laravel/framework": "4.0.*",
-		"legrand/sparqlmodel": "dev-master"
+		"legrand/sparqlmodel": "dev-master",
+		"davejamesmiller/laravel-breadcrumbs": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
