@@ -13,11 +13,26 @@
 
 
 Route::controller('account','AccountController' );
-Route::get('/', 'HomeController@showIndex');
-Route::get('/list', array("as"=>"list", "uses"=>'ListController@showIndex'));
+Route::get('/', array("as"=>"home","uses"=> 'HomeController@showIndex'));
+
+
+
+
+Route::group(array('prefix' => 'tests'), function()
+{
+    Route::get('/latest', array("as"=>"latest", "uses"=>'ListController@showLatest'));
+    Route::get('/item/{test}',array("as"=>"tests.item", "uses"=>'ListController@showIndex'));
+
+});
 
 Route::group(array('prefix' => 'api'), function()
 {
     Route::controller('error', 'RDFErrorController');
+    Route::controller('tests', 'RDFErrorController');
+   /* Route::group(array('prefix' => 'tests'), function(){
+        Route::controller('latest', 'RDFErrorController');
 
+
+    });
+*/
 });

@@ -9,6 +9,11 @@
 
 class RDFErrorController extends BaseController
 {
+    public  function getLatest(){
+       // $collection = new RDFErrorCollection();
+
+        return Response::json(array("name"=>"http://dbpedia.org/debug/Test-20130617"));
+    }
     public function getFacets(){
 
 
@@ -23,13 +28,14 @@ class RDFErrorController extends BaseController
     }
 
 
-    public function getIndex()
+    public function getIndex($test=null)
     {
         $limit = Input::get('rows', 10);
         $page =  Input::get('page', 0);
         $sort = Input::get('sidx', "");
         $order = Input::get('sord', "asc");
         $filters = Input::get('filters', array());
+        if(isset($test))$filters["test"] = array("name"=>"test", "operator"=>"=","value"=>$test);
 //var_dump($filters);
         $sortProperties = self::getSorter($sort);
         $collection = new RDFErrorCollection();

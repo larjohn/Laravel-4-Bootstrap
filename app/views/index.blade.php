@@ -1,7 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
-
+<!-- BEGIN MAIN CONTENT -->
+<div id="content">
+<!-- .outer -->
+<div class="container-fluid outer">
 <div class="row-fluid">
 <!-- .inner -->
 <div class="span12 inner">
@@ -278,7 +281,9 @@
 <!-- /.inner -->
 </div>
 <!-- /.row-fluid -->
-
-
+</div>
+<!-- /.outer -->
+</div>
+<!-- END CONTENT -->
 
 @stop

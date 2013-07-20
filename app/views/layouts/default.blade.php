@@ -36,6 +36,10 @@
 
 		@show
     </style>
+
+    <script type="text/javascript">
+        appRoot = "{{URL::to('')}}/"
+    </script>
     <script type="text/javascript" src="{{{ asset('assets/js/jquery-1.9.0.js') }}}"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/underscore-1.4.3.js') }}}"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/backbone-0.9.10.js') }}}"></script>
@@ -80,7 +84,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="index.html">metamin:DBpedia Validation</a>
+                <a class="brand" href="{{URL::to('')}}">metamin:DBpedia Validation</a>
                 <!-- .topnav -->
                 <div class="btn-toolbar topnav">
                     <div class="btn-group">
@@ -118,7 +122,7 @@
                 <div class="nav-collapse collapse">
                     <!-- .nav -->
                     <ul class="nav">
-                        <li class="active"><a href="index.html">Dashboard</a></li>
+                        <li class="active"><a href="/">Dashboard</a></li>
                         <li><a href="table.html">Tables</a></li>
                         <li><a href="file.html">File Manager</a></li>
                         <li class="dropdown">
@@ -152,7 +156,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h3><i class="icon-home"></i>
-                        {{ Breadcrumbs::render('list') }}
+                        {{ Breadcrumbs::render($bread) }}
                     </h3>
                 </div>
             </div>
@@ -169,7 +173,7 @@
     <!-- .user-media -->
     <div class="media user-media hidden-phone">
         <a href="" class="user-link">
-            <img src="assets/img/user.gif" alt="" class="media-object img-polaroid user-img">
+            <img src="{{{ asset('assets/img/user.gif') }}}" alt="" class="media-object img-polaroid user-img">
             <span class="label user-label">16</span>
         </a>
 
@@ -189,12 +193,12 @@
     <ul id="menu" class="unstyled accordion collapse in">
         <li class="accordion-group active">
             <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#dashboard-nav">
-                <i class="icon-dashboard icon-large"></i> Errors <span
+                <i class="icon-dashboard icon-large"></i> Validation Tests <span
                     class="label label-inverse pull-right">2</span>
             </a>
             <ul class="collapse in" id="dashboard-nav">
-                <li><a href="index.html"><i class="icon-angle-right"></i> Table</a></li>
-                <li><a href="alterne.html"><i class="icon-angle-right"></i> Alternative Style</a></li>
+                <li><a href="tests/latest"><i class="icon-angle-right"></i> Latest </a></li>
+                <li><a href="alterne.html"><i class="icon-angle-right"></i> Overview </a></li>
             </ul>
         </li>
         <li class="accordion-group ">

@@ -11,6 +11,14 @@
 
 
 <script type="text/javascript" charset="utf-8">
+    var mode = "{{$mode}}";
+    var error_filters = {
+    @if (isset($mode) && $mode == "item" )
+        test:"{{$test}}"
+    @endif
+     };
+
+
     $(document).ready(function () {
 
         // TO CREATE AN INSTANCE
@@ -49,22 +57,22 @@
 
 
 </script>
-<script src="assets/js/jstree/jquery.jstree.js" type="text/javascript"></script>
-<link href="assets/css/jstree/themes/default/style.css" media="screen" rel="stylesheet" type="text/css"/>
-<link href="assets/css/ui.jqgrid.css" media="screen" rel="stylesheet" type="text/css"/>
+<script src="{{{ asset('assets/js/jstree/jquery.jstree.js') }}}" type="text/javascript"></script>
+<link href="{{{ asset('assets/css/jstree/themes/default/style.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
+<link href="{{{ asset('assets/css/ui.jqgrid.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/backbone_extensions.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/jquery_extensions.js') }}}"></script>
 
 
-<script src="assets/js/visualsearch/visualsearch.js" type="text/javascript"></script>
+<script src="{{{ asset('assets/js/visualsearch/visualsearch.js') }}}" type="text/javascript"></script>
 
 <!--[if (!IE)|(gte IE 8)]><!-->
-<link href="assets/css/visualsearch/visualsearch-datauri.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="{{{ asset('assets/css/visualsearch/visualsearch-datauri.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 
 <!--<![endif]-->
 <!--[if lte IE 7]><!-->
-<link href="assets/css/visualsearch/visualsearch.css" media="screen" rel="stylesheet" type="text/css"/>
+<link href="{{{ asset('assets/css/visualsearch/visualsearch.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 <!--<![endif]-->
 
 <!-- Modal -->
@@ -114,6 +122,9 @@
                 @%/for%@
             </dt>
         </dl>
+<div class="form-actions">
+    <button class="btn btn-success">Add subject</button>
+</div>
 
     </div>
     <div class="modal-footer">
@@ -127,7 +138,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <h1 class="page-header">Validation Errors List</h1>
-
+        <h3 id="test_name"></h3>
         <div id="search_box_container"></div>
         <div id="search_query">&nbsp;</div>
 

@@ -2,6 +2,7 @@ var vie = new VIE();
 var namespaces =  new vie.Namespaces(
     "http://debug.dbpedia.org/",
 {"dbpedia": "http://dbpedia.org/resource/",
+    "dbg_temp":"http://dbpedia.org/debug/",
 "dbp-prop": "http://dbpedia.org/property/",
 "dbp-owl": "http://dbpedia.org/ontology/",
 "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

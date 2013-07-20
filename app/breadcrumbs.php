@@ -1,8 +1,11 @@
 <?php
 //Breadcrumbs::setView('_partials/breadcrumbs');
 
-Breadcrumbs::register('list', function($breadcrumbs) {
-    $breadcrumbs->push('Home', URL::route('list'));
+Breadcrumbs::register('latest', function($breadcrumbs) {
+    $breadcrumbs->push('Latest', URL::route('latest'));
+});
+Breadcrumbs::register('home', function($breadcrumbs) {
+    $breadcrumbs->push('Home', URL::route('home'));
 });
 
 Breadcrumbs::register('blog', function($breadcrumbs) {

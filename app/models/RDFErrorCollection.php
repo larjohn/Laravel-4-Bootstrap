@@ -74,7 +74,7 @@ class RDFErrorCollection {
             $propertyUri = $class::getUriFromProperty($filter["name"]);
             if($propertyUri=="")continue;
             if(isset($class::getMultiMapping()[$propertyUri])){
-                $sparql->where('?uri', "<".$propertyUri.">",  "?".$filter["value"]);
+                $sparql->where('?uri', "<".$propertyUri.">",  "<".$filter["value"]. ">");
             }
             else{
                 $sparql->where('?uri', "<".$propertyUri.">",  "?".$filter["name"]);
@@ -97,9 +97,11 @@ class RDFErrorCollection {
         $this->applyFilters($sparql);
 
         $data = $sparql->launch();
+//echo $sparql->sparql;
         foreach($data["results"]["bindings"][0] as $callret){
             return $callret["value"];
         }
+        return 0;
     }
 
 
