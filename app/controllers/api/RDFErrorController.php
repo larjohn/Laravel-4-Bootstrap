@@ -28,17 +28,43 @@ class RDFErrorController extends BaseController
     }
 
 
+    private function registerNamespaces(){
+        EasyRdf_Namespace::setDefault(Config::get("rdf.ns"));
+//var_dump(Config::get("rdf.namespaces"));die;
+        foreach (Config::get("rdf.namespaces") as $ns=>$long) {
+
+           // try{
+                EasyRdf_Namespace::set($ns,$long);
+            //}
+           /* catch(InvalidArgumentException $e){
+                ;var_dump($long);
+                die;
+            }*/
+
+        }
+
+
+    }
+
     public function getIndex($test=null)
     {
+
+        $this->registerNamespaces();
         $limit = Input::get('rows', 10);
         $page =  Input::get('page', 0);
         $sort = Input::get('sidx', "");
         $order = Input::get('sord', "asc");
         $filters = Input::get('filters', array());
-        if(isset($test))$filters["test"] = array("name"=>"test", "operator"=>"=","value"=>$test);
-//var_dump($filters);
+
+
+
+        if(isset($test))
+            $filters["test"] = array("name"=>"test", "operator"=>"=","value"=>EasyRdf_Namespace::expand($test["value"]));
+        //var_dump($test);
+        //var_dump(EasyRdf_Namespace::expand($test["value"]));
         $sortProperties = self::getSorter($sort);
         $collection = new RDFErrorCollection();
+        //var_dump($filters);//die;
         $collection->setFilters($filters);
         $all = $collection->getAll($page,$limit, $sortProperties,$order);
 

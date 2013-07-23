@@ -7,17 +7,6 @@ class RDFError extends RDFModel {
     public $hash                    = null;
 
 
-    private static  $tquery = '
-construct {
-?s ?p ?a
-}
-WHERE {
-
-?s a <http://spinrdf.org/spin#ConstraintViolation>.
-?s ?p ?a.
-} limit 100
-';
-
 
 
     public function __construct(){
@@ -114,6 +103,7 @@ WHERE {
 
         $error = array_filter($objects, function($a){
             if(is_a($a,"RDFError")) return $a;
+            else return NULL;
         });
 
         return reset($error);

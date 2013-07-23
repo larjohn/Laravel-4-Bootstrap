@@ -156,7 +156,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h3><i class="icon-home"></i>
-                        {{ Breadcrumbs::render($bread) }}
+                        {{ Breadcrumbs::render($bread["path"], $bread["label"]) }}
                     </h3>
                 </div>
             </div>

@@ -26,14 +26,14 @@ class ListController extends BaseController {
 
         // var_dump($res->label);
         if(isset($test)){
-            return View::make('list')
-                ->with('title',"Errors List")
-                ->with('bread', "latest")
+            return View::make('errors/list')
+                ->with('title',"Errors list for ". $test)
+                ->with('bread', array("path"=>"tests.item", "label"=>$test))
                 ->with("mode","item")
                 ->with("test", $test);
         }
         else{
-            return View::make('list')
+            return View::make('errors/list')
                 ->with('title',"Errors List")
                 ->with('bread', "latest");
         }

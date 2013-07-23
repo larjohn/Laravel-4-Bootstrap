@@ -1,8 +1,7 @@
 @extends('layouts.default')
-
 @section('content')
-<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 
+<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 <script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
@@ -12,12 +11,10 @@
 
 <script type="text/javascript" charset="utf-8">
     var mode = "{{$mode}}";
-    var error_filters = {
+    error_filters = {};
     @if (isset($mode) && $mode == "item" )
-        test:"{{$test}}"
+    var test_item = "{{$test}}"
     @endif
-     };
-
 
     $(document).ready(function () {
 
@@ -48,11 +45,7 @@
 
                 error_filters.significance.push($(checked[i]).attr("id"));
             }
-
-
         });
-
-
     });
 
 
@@ -137,7 +130,7 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
-        <h1 class="page-header">Validation Errors List</h1>
+        <h1 class="page-header">{{{$title}}}</h1>
         <h3 id="test_name"></h3>
         <div id="search_box_container"></div>
         <div id="search_query">&nbsp;</div>
@@ -238,7 +231,6 @@
 
         <div class="span9" id="errors-span">
 
-
             <table id="list">
 
             </table>
@@ -263,12 +255,9 @@
                     </div>
                 </div>
                 @%/for%@
-
-
             </script>
             <!--Sidebar content-->
         </div>
     </div>
-
 </div>
 @stop

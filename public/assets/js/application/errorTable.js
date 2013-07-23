@@ -103,9 +103,17 @@ $(document).ready(function () {
             error_filters["test"] = {value: data.name, name: "test", "operator": "="};
             fillData();
             var shortened = VIE.Util.toCurie("<" + data.name + ">", false, namespaces);
-            $("#test_name").html("<a href='item/"+encodeURIComponent(shortened)+"'>"+data.name+"</a>")
+            $("#test_name").html("<a href='" + appRoot + "tests/item/"+encodeURIComponent(shortened)+"'>"+data.name+"</a>");
 
         });
+    }
+    else if(mode=="item"){
+            error_filters["test"] = {value: test_item, name: "test", "operator": "="};
+            fillData();
+           // var shortened = VIE.Util.toCurie("<" + test_item + ">", false, namespaces);
+
+
+
     }
     else{
         fillData();

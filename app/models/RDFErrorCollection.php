@@ -19,13 +19,33 @@ class RDFErrorCollection {
 
     }
 
+    protected  function registerNamespaces(){
+        EasyRdf_Namespace::setDefault(Config::get("rdf.ns"));
+//var_dump(Config::get("rdf.namespaces"));die;
+        foreach (Config::get("rdf.namespaces") as $ns=>$long) {
+
+            // try{
+            EasyRdf_Namespace::set($ns,$long);
+            //}
+            /* catch(InvalidArgumentException $e){
+                 ;var_dump($long);
+                 die;
+             }*/
+
+        }
+
+
+    }
+
     public function setFilters($filters=array()){
+
+        $this->registerNamespaces();
         foreach ($filters as $key=>$filter) {
             if($key=='undefined')continue;
             $this->currentFilters[$filter["name"]] = array(
                 "name"=>$filter["name"],
               "operator"  => $filter["operator"],
-              "value"  => $filter["value"],
+              "value"  =>EasyRdf_Namespace::expand($filter["value"]),
 
             );
         }
@@ -97,7 +117,8 @@ class RDFErrorCollection {
         $this->applyFilters($sparql);
 
         $data = $sparql->launch();
-//echo $sparql->sparql;
+//echo $sparql->sparql;die;
+  //var_dump($this->currentFilters);
         foreach($data["results"]["bindings"][0] as $callret){
             return $callret["value"];
         }

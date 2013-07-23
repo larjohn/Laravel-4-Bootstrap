@@ -20,6 +20,7 @@ Route::get('/', array("as"=>"home","uses"=> 'HomeController@showIndex'));
 
 Route::group(array('prefix' => 'tests'), function()
 {
+    Route::get('/', array("as"=>"tests","uses"=>'ListController@showIndex'));
     Route::get('/latest', array("as"=>"latest", "uses"=>'ListController@showLatest'));
     Route::get('/item/{test}',array("as"=>"tests.item", "uses"=>'ListController@showIndex'));
 
