@@ -6,20 +6,22 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class ListController extends BaseController {
+class ErrorController extends BaseController {
 
 
-    public function showLatest(){
-        return View::make('list')
+    public function showLatestTestIndex(){
+        return View::make('errors/list')
             ->with('title',"Latest Validation Test Results")
-            ->with('bread', "latest")
+            ->with('bread', array("path"=>"latest", "label"=>"latest test"))
             ->with("mode","latest");
 
 
     }
 
 
-    public function showIndex($test)
+
+
+    public function showTestIndex($test)
     {
         //$res =  RDFDBpediaResource::find('http://dbpedia.org/resource/Family_Without_a_Name'); // Same as new User::find('http://semreco/person/damien_legrand');
 
@@ -28,7 +30,7 @@ class ListController extends BaseController {
         if(isset($test)){
             return View::make('errors/list')
                 ->with('title',"Errors list for ". $test)
-                ->with('bread', array("path"=>"tests.item", "label"=>$test))
+                ->with('bread', array("path"=>"tests.item.all","params"=>array("test"=>$test,"label"=>"Errors List")))
                 ->with("mode","item")
                 ->with("test", $test);
         }
@@ -40,5 +42,12 @@ class ListController extends BaseController {
 
     }
 
+
+    public function showQueryIndex($test){
+        return View::make('errors/treemap')
+            ->with('title', "Errors by query")
+            ->with('bread', array('path'=>"tests.item.queries","params"=>array("test"=>$test,"label"=>"Queries")))
+            ->with('test',$test);
+    }
 
 }

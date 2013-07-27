@@ -20,9 +20,19 @@ Route::get('/', array("as"=>"home","uses"=> 'HomeController@showIndex'));
 
 Route::group(array('prefix' => 'tests'), function()
 {
-    Route::get('/', array("as"=>"tests","uses"=>'ListController@showIndex'));
-    Route::get('/latest', array("as"=>"latest", "uses"=>'ListController@showLatest'));
-    Route::get('/item/{test}',array("as"=>"tests.item", "uses"=>'ListController@showIndex'));
+    Route::get('/', array("as"=>"tests","uses"=>'ErrorController@showTestIndex'));
+    Route::get('/latest', array("as"=>"latest", "uses"=>'ErrorController@showLatestTestIndex'));
+
+    Route::group(array('prefix'=>'item/{test}'),function(){
+        Route::get('/',array("as"=>"tests.item", "uses"=>'TestController@showTestOverview'));
+        Route::get('/all',array("as"=>"tests.item.all", "uses"=>'ErrorController@showTestIndex'));
+        Route::get('/type',array("as"=>"tests.item.type", "uses"=>'ErrorController@showTestIndex'));
+        Route::get('/query',array("as"=>"tests.item.queries", "uses"=>'ErrorController@showQueryIndex'));
+
+    });
+
+
+
 
 });
 

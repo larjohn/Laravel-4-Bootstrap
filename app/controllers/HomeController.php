@@ -22,7 +22,7 @@ class HomeController extends BaseController {
        // var_dump($error->label);
         //var_dump($error->listing("domain"));
 
-		return View::make('home')->with('title',"Home")->with('bread', "home");
+		return View::make('home')->with('title',"Home")->with('bread', array("path"=>"home", "label"=>'Home'));
 	}
 
 }

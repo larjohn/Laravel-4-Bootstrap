@@ -94,8 +94,8 @@
                         </a>
                     </div>
                     <div class="btn-group">
-                        <a class="btn btn-inverse" rel="tooltip" data-original-title="E-mail" data-placement="bottom">
-                            <i class="icon-envelope"></i>
+                        <a class="btn btn-inverse" rel="tooltip" data-original-title="Select Test" data-placement="bottom">
+                            <i class="icon-ellipsis-vertical"></i>
                             <span class="label label-warning">5</span>
                         </a>
                         <a class="btn btn-inverse" rel="tooltip" href="#" data-original-title="Messages"
@@ -122,20 +122,10 @@
                 <div class="nav-collapse collapse">
                     <!-- .nav -->
                     <ul class="nav">
-                        <li class="active"><a href="/">Dashboard</a></li>
-                        <li><a href="table.html">Tables</a></li>
-                        <li><a href="file.html">File Manager</a></li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                Form Elements <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="form-general.html">General</a></li>
-                                <li><a href="form-validation.html">Validation</a></li>
-                                <li><a href="form-wysiwyg.html">WYSIWYG</a></li>
-                                <li><a href="form-wizard.html">Wizard &amp; File Upload</a></li>
-                            </ul>
-                        </li>
+                        <li class="active"><a href="/">Test Dashboard</a></li>
+                        <li><a href="table.html">Queries</a></li>
+                        <li><a href="file.html">Tests</a></li>
+
                     </ul>
                     <!-- /.nav -->
                 </div>
@@ -156,7 +146,8 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h3><i class="icon-home"></i>
-                        {{ Breadcrumbs::render($bread["path"], $bread["label"]) }}
+
+                        {{ Breadcrumbs::render($bread["path"], $bread["params"]) }}
                     </h3>
                 </div>
             </div>
@@ -193,39 +184,28 @@
     <ul id="menu" class="unstyled accordion collapse in">
         <li class="accordion-group active">
             <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#dashboard-nav">
-                <i class="icon-dashboard icon-large"></i> Validation Tests <span
+                <i class="icon-dashboard icon-large"></i> Validation Test <span
                     class="label label-inverse pull-right">2</span>
             </a>
             <ul class="collapse in" id="dashboard-nav">
-                <li><a href="tests/latest"><i class="icon-angle-right"></i> Latest </a></li>
-                <li><a href="alterne.html"><i class="icon-angle-right"></i> Overview </a></li>
+                 <li><a href="{{{URL::to('tests/item/'.$test)}}}"><i class="icon-angle-right"></i> Overview </a></li>
             </ul>
         </li>
-        <li class="accordion-group ">
-            <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                <i class="icon-tasks icon-large"></i> Test Sets <span class="label label-inverse pull-right">2</span>
-            </a>
-            <ul class="collapse " id="component-nav">
-                <li><a href="icon.html"><i class="icon-angle-right"></i> Icon & Button</a></li>
-                <li><a href="progress.html"><i class="icon-angle-right"></i> Progress</a></li>
-            </ul>
-        </li>
-        <li class="accordion-group ">
-            <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
-                <i class="icon-pencil icon-large"></i> Queries <span class="label label-inverse pull-right">4</span>
-            </a>
-            <ul class="collapse " id="form-nav">
-                <li><a href="form-general.html"><i class="icon-angle-right"></i> General</a></li>
-                <li><a href="form-validation.html"><i class="icon-angle-right"></i> Validation</a></li>
-                <li><a href="form-wysiwyg.html"><i class="icon-angle-right"></i> WYSIWYG</a></li>
-                <li><a href="form-wizard.html"><i class="icon-angle-right"></i> Wizard &amp; File Upload</a></li>
-            </ul>
-        </li>
-        <li><a href="table.html"><i class="icon-table icon-large"></i> Tags </a></li>
-        <li><a href="file.html"><i class="icon-file icon-large"></i> Statistics </a></li>
-        <li><a href="typography.html"><i class="icon-font icon-large"></i> Visual </a></li>
-           <li><a href="login.html"><i class="icon-signin icon-large"></i> Login Page</a></li>
-    </ul>
+        <li class="accordion-group active">
+                    <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#dashboard-nav">
+                        <i class="icon-dashboard icon-large"></i> Browse Errors <span
+                            class="label label-inverse pull-right">2</span>
+                    </a>
+                    <ul class="collapse in" id="dashboard-nav">
+                        <li><a href="{{{URL::to('tests/item/'.$test.'/all')}}}"><i class="icon-angle-right"></i> all </a></li>
+                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by type </a></li>
+                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by category </a></li>
+                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by source </a></li>
+                        <li><a href="{{{URL::to('tests/item/'.$test.'/query')}}}"><i class="icon-angle-right"></i> by query </a></li>
+
+                    </ul>
+                </li>
+       </ul>
     <!-- END MAIN NAVIGATION -->
 
 </div>
@@ -238,8 +218,6 @@
         <div class="row-fluid">
             <!-- .inner -->
             <div class="span12 inner">
-
-
                 <!--BEGIN LATEST COMMENT-->
                 <!-- .row-fluid -->
                 <div class="row-fluid">
