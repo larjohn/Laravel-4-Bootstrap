@@ -14,16 +14,16 @@ Breadcrumbs::register('tests.item', function($breadcrumbs, $label) {
     $breadcrumbs->push($label, URL::route('tests.item',$label));
 });
 
-Breadcrumbs::register('tests.item.queries', function($breadcrumbs, $test, $label) {
+Breadcrumbs::register('tests.item.queries', function($breadcrumbs, $params) {
 
-    $breadcrumbs->parent('tests.item',$test);
-    $breadcrumbs->push($label, URL::route('tests.item.queries',$test));
+    $breadcrumbs->parent('tests.item',$params["test"]);
+    $breadcrumbs->push($params["label"], URL::route('tests.item.queries',$params["test"]));
 });
 
-Breadcrumbs::register('tests.item.all', function($breadcrumbs, $test, $label) {
+Breadcrumbs::register('tests.item.all', function($breadcrumbs, $params) {
 
-    $breadcrumbs->parent('tests.item',$test);
-    $breadcrumbs->push($label, URL::route('tests.item.all',$test));
+    $breadcrumbs->parent('tests.item',$params["test"]);
+    $breadcrumbs->push($params["label"], URL::route('tests.item.all',$params["test"]));
 });
 Breadcrumbs::register('home', function($breadcrumbs) {
     $breadcrumbs->push('Home', URL::route('home'));
