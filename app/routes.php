@@ -12,6 +12,7 @@
 */
 
 
+
 Route::controller('account','AccountController' );
 Route::get('/', array("as"=>"home","uses"=> 'HomeController@showIndex'));
 
@@ -20,6 +21,7 @@ Route::get('/', array("as"=>"home","uses"=> 'HomeController@showIndex'));
 
 Route::group(array('prefix' => 'tests'), function()
 {
+
     Route::get('/', array("as"=>"tests","uses"=>'ErrorController@showTestIndex'));
     Route::get('/latest', array("as"=>"latest", "uses"=>'ErrorController@showLatestTestIndex'));
 
@@ -39,7 +41,7 @@ Route::group(array('prefix' => 'tests'), function()
 Route::group(array('prefix' => 'api'), function()
 {
     Route::controller('error', 'RDFErrorController');
-    Route::controller('tests', 'RDFErrorController');
+    Route::controller('tests', 'RDFTestController');
    /* Route::group(array('prefix' => 'tests'), function(){
         Route::controller('latest', 'RDFErrorController');
 

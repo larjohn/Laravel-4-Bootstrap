@@ -198,9 +198,9 @@
                     </a>
                     <ul class="collapse in" id="dashboard-nav">
                         <li><a href="{{{URL::to('tests/item/'.$test.'/all')}}}"><i class="icon-angle-right"></i> all </a></li>
-                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by type </a></li>
-                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by category </a></li>
-                        <li><a href="alterne.html"><i class="icon-angle-right"></i> by source </a></li>
+                        <li><a href="{{{URL::to('tests/item/'.$test.'/type')}}}"><i class="icon-angle-right"></i> by type </a></li>
+                        <li><a href="{{{URL::to('tests/item/'.$test.'/category')}}}"><i class="icon-angle-right"></i> by category </a></li>
+                        <li><a href="{{{URL::to('tests/item/'.$test.'/source')}}}"><i class="icon-angle-right"></i> by source </a></li>
                         <li><a href="{{{URL::to('tests/item/'.$test.'/query')}}}"><i class="icon-angle-right"></i> by query </a></li>
 
                     </ul>

@@ -9,20 +9,20 @@ Breadcrumbs::register('tests', function($breadcrumbs) {
     $breadcrumbs->push('Tests', URL::route('tests'));
 });
 
-Breadcrumbs::register('tests.item', function($breadcrumbs, $label) {
-    $breadcrumbs->parent('tests');
-    $breadcrumbs->push($label, URL::route('tests.item',$label));
+Breadcrumbs::register('tests.item', function($breadcrumbs, $params) {
+    $breadcrumbs->parent('tests'); //var_dump($params);die;
+    $breadcrumbs->push($params["label"], URL::route('tests.item',$params["label"]));
 });
 
 Breadcrumbs::register('tests.item.queries', function($breadcrumbs, $params) {
 
-    $breadcrumbs->parent('tests.item',$params["test"]);
+    $breadcrumbs->parent('tests.item',$params);
     $breadcrumbs->push($params["label"], URL::route('tests.item.queries',$params["test"]));
 });
 
 Breadcrumbs::register('tests.item.all', function($breadcrumbs, $params) {
 
-    $breadcrumbs->parent('tests.item',$params["test"]);
+    $breadcrumbs->parent('tests.item',$params);
     $breadcrumbs->push($params["label"], URL::route('tests.item.all',$params["test"]));
 });
 Breadcrumbs::register('home', function($breadcrumbs) {

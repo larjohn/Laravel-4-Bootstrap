@@ -84,3 +84,23 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+
+
+//RDF Namespaces
+
+EasyRdf_Namespace::setDefault(Config::get("rdf.ns"));
+//var_dump(Config::get("rdf.namespaces"));die;
+foreach (Config::get("rdf.namespaces") as $ns=>$long) {
+
+    // try{
+    EasyRdf_Namespace::set($ns,$long);
+    //}
+    /* catch(InvalidArgumentException $e){
+         ;var_dump($long);
+         die;
+     }*/
+
+}
+
+

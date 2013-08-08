@@ -3,7 +3,8 @@
 		"laravel/framework": "4.0.*",
 		"legrand/sparqlmodel": "dev-master",
 		"davejamesmiller/laravel-breadcrumbs": "dev-master",
-		"easyrdf/easyrdf": "dev-master"
+		"easyrdf/easyrdf": "dev-master",
+        "guzzle/guzzle": "~3.7"
 	},
 	"autoload": {
 		"classmap": [

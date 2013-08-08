@@ -10,10 +10,21 @@ class ErrorController extends BaseController {
 
 
     public function showLatestTestIndex(){
-        return View::make('errors/list')
-            ->with('title',"Latest Validation Test Results")
-            ->with('bread', array("path"=>"latest", "label"=>"latest test"))
-            ->with("mode","latest");
+
+
+
+        $api_url =   Config::get("api.url");
+
+
+        Guzzle\Http\StaticClient::mount();
+        $response = Guzzle::get($api_url."/tests/latest");
+        $data = $response->json();
+
+        $test = $data["name"];
+
+
+        return Redirect::route('tests.item', array('test' => urlencode($test)));
+
 
 
     }
@@ -37,7 +48,7 @@ class ErrorController extends BaseController {
         else{
             return View::make('errors/list')
                 ->with('title',"Errors List")
-                ->with('bread', "latest");
+                ->with('bread', array('path'=>"tests.item.queries","params"=>array("label"=>"Errors")));
         }
 
     }

@@ -17,6 +17,8 @@ class HomeController extends BaseController {
 
 	public function showIndex()
 	{
+        return Redirect::route('latest');
+
         $error =  RDFError::find("ArchitecturalStructure");
 
        // var_dump($error->label);

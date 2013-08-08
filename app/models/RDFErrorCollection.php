@@ -19,28 +19,10 @@ class RDFErrorCollection {
 
     }
 
-    protected  function registerNamespaces(){
-        EasyRdf_Namespace::setDefault(Config::get("rdf.ns"));
-//var_dump(Config::get("rdf.namespaces"));die;
-        foreach (Config::get("rdf.namespaces") as $ns=>$long) {
-
-            // try{
-            EasyRdf_Namespace::set($ns,$long);
-            //}
-            /* catch(InvalidArgumentException $e){
-                 ;var_dump($long);
-                 die;
-             }*/
-
-        }
-
-
-    }
 
     public function setFilters($filters=array()){
 
-        $this->registerNamespaces();
-        foreach ($filters as $key=>$filter) {
+             foreach ($filters as $key=>$filter) {
             if($key=='undefined')continue;
             $this->currentFilters[$filter["name"]] = array(
                 "name"=>$filter["name"],
@@ -52,10 +34,14 @@ class RDFErrorCollection {
     }
 
 
-    public function getFacets(){
+
+    public function getFacets($variable = ""){
         $class = "RDFError";
         $facetResults = array();
         foreach (self::$enabledFacets as $facet) {
+            if($variable!="" && $facet!=$variable)
+                continue;
+
             $sparql = new SPARQL();
             $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
             $sparql->select(SPARQLModel::getConfig('sparqlmodel.graph'));

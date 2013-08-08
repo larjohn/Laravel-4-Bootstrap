@@ -28,28 +28,8 @@ class RDFErrorController extends BaseController
     }
 
 
-    private function registerNamespaces(){
-        EasyRdf_Namespace::setDefault(Config::get("rdf.ns"));
-//var_dump(Config::get("rdf.namespaces"));die;
-        foreach (Config::get("rdf.namespaces") as $ns=>$long) {
-
-           // try{
-                EasyRdf_Namespace::set($ns,$long);
-            //}
-           /* catch(InvalidArgumentException $e){
-                ;var_dump($long);
-                die;
-            }*/
-
-        }
-
-
-    }
-
     public function getIndex($test=null)
     {
-
-        $this->registerNamespaces();
         $limit = Input::get('rows', 10);
         $page =  Input::get('page', 0);
         $sort = Input::get('sidx', "");
@@ -112,6 +92,16 @@ class RDFErrorController extends BaseController
 
 
         return Response::json($output);
+    }
+
+    public function getQueries(){
+        $test = Input::get('test', "");
+        $collection = new RDFErrorCollection();
+        $filters = array();
+        if(isset($test)&&$test!="")
+            $filters["test"] = array("name"=>"test", "operator"=>"=","value"=>EasyRdf_Namespace::expand($test));
+        $collection->setFilters($filters);
+        return Response::json($collection->getFacets("query"));
     }
 
 

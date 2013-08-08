@@ -7,49 +7,28 @@
 <script>
 
 
-    var root =
-    {
-        "name": "flare",
-        "children": [
-        {
-            "name": "analytics",
-            "children": [
-                {
-                    "name": "cluster",
-                    "children": [
-                        {"name": "AgglomerativeCluster", "size": 3938},
-                        {"name": "CommunityStructure", "size": 3812},
-                        {"name": "HierarchicalCluster", "size": 6714},
-                        {"name": "MergeEdge", "size": 743}
-                    ]
-                },
-                {
-                    "name": "graph",
-                    "children": [
-                        {"name": "BetweennessCentrality", "size": 3534},
-                        {"name": "LinkDistance", "size": 5731},
-                        {"name": "MaxFlowMinCut", "size": 7840},
-                        {"name": "ShortestPaths", "size": 5914},
-                        {"name": "SpanningTree", "size": 3416}
-                    ]
-                }]
-        }
-            ]
-    };
+    $.getJSON(appRoot + 'api/error/queries', function (data) {
+        var root = {name:"queries", children:[]};
 
-    var diameter = 960,
-        format = d3.format(",d"),
-        color = d3.scale.category20c();
+        $.each(data.query.elements, function () {
+            root.children.push({name:this.label,size:this.count});
+        });
 
-    var bubble = d3.layout.pack()
-        .sort(null)
-        .size([diameter, diameter])
-        .padding(1.5);
 
-    var svg = d3.select("#svg").append("svg")
-        .attr("width", diameter)
-        .attr("height", diameter)
-        .attr("class", "bubble");
+
+        var diameter = 960,
+            format = d3.format(",d"),
+            color = d3.scale.category20c();
+
+        var bubble = d3.layout.pack()
+            .sort(null)
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        var svg = d3.select("#svg").append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
 
 
         var node = svg.selectAll(".node")
@@ -72,20 +51,27 @@
             .text(function(d) { return d.className.substring(0, d.r / 3); });
 
 
-    // Returns a flattened hierarchy containing all leaf nodes under the root.
-    function classes(root) {
-        var classes = [];
+        // Returns a flattened hierarchy containing all leaf nodes under the root.
+        function classes(root) {
+            var classes = [];
 
-        function recurse(name, node) {
-            if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
-            else classes.push({packageName: name, className: node.name, value: node.size});
+            function recurse(name, node) {
+                if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+                else classes.push({packageName: name, className: node.name, value: node.size});
+            }
+
+            recurse(null, root);
+            return {children: classes};
         }
 
-        recurse(null, root);
-        return {children: classes};
-    }
+        d3.select(self.frameElement).style("height", diameter + "px");
+    });
 
-    d3.select(self.frameElement).style("height", diameter + "px");
+
+
+
+
+
 
 </script>
 
