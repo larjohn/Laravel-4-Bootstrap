@@ -114,7 +114,7 @@ class RDFErrorController extends BaseController
 
         if($rdf_error) $rdf_error->load_value();
 
-        $error = $rdf_error->toArray();
+        $error = $rdf_error->toArray(true);
 
         return Response::json($error);
 

@@ -3,7 +3,8 @@ return array(
     "ns" => "http://debug.dbpedia.org/",
     "namespaces" => array(
         "dbpedia" => "http://dbpedia.org/resource/",
-        "dbgtemp" => "http://dbpedia.org/debug/",
+        "dbgtemp" => "http://debug.dbpedia.org#",
+        "dbgtests" => "http://debug.dbpedia.org/test/",
         "dbpprop" => "http://dbpedia.org/property/",
         "dbpowl" => "http://dbpedia.org/ontology/",
         "rdf" => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

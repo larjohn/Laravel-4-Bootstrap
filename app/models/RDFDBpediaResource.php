@@ -7,7 +7,8 @@
 
  */
 use Legrand\SPARQLModel;
-class RDFDBpediaResource extends SPARQLModel {
+use Base\RDFModel;
+class RDFDBpediaResource extends RDFModel {
 
     protected static $type          = "http://www.w3.org/2002/07/owl#Thing";
     protected static $status        = false;
@@ -32,6 +33,15 @@ class RDFDBpediaResource extends SPARQLModel {
         'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
 
     ];
+
+    protected static $multiMapping  = [
+
+        "http://purl.org/dc/terms/subject" => [
+            'property' => 'category',
+            'mapping' => 'RDFSubject', //should be the name of the corresponding class
+            'inverse' => false,
+        ],
+     ];
 
 
 }

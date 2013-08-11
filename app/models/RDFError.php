@@ -19,7 +19,7 @@ class RDFError extends RDFModel {
     protected static $type          = "http://spinrdf.org/spin#ConstraintViolation";
     protected static $mapping       = [
        // 'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
-        'http://dbpedia.org/debug/queryID' => 'query',
+        'http://debug.dbpedia.org#queryID' => 'query',
      //   'http://semreco/property/performed' => 'performed'
     ];
 
@@ -42,7 +42,7 @@ class RDFError extends RDFModel {
             'mapping' => 'RDFProperty', //should be the name of the corresponding class
             'inverse' => false,
         ],
-        "http://dbpedia.org/debug/test" => [
+        "http://debug.dbpedia.org#test" => [
             'property' => 'test',
             'mapping' => 'RDFProperty', //should be the name of the corresponding class
             'inverse' => false,
@@ -96,8 +96,8 @@ class RDFError extends RDFModel {
         $sparql->where('?uri', 'a',  "<".RDFError::getType().">");
         $sparql->where("?uri", "<http://spinrdf.org/spin#violationRoot>" ,"<".$resource.">");
         $sparql->where("?uri", "<http://spinrdf.org/spin#violationPath>" ,"<".$property.">");
-        $sparql->where("?uri", "<http://dbpedia.org/debug/test>" ,"<".$test.">");
-        $sparql->where("?uri", "<http://dbpedia.org/debug/queryID>" ,"'".$query."'@en");
+        $sparql->where("?uri", "<http://debug.dbpedia.org#test>" ,"<".$test.">");
+        $sparql->where("?uri", "<http://debug.dbpedia.org#queryID>" ,"'".$query."'@en");
 
         $objects = self::listingFromQuery($sparql, $forProperty = false);
 

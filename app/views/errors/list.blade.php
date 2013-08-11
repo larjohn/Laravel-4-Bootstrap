@@ -96,11 +96,14 @@
             <dt>@%:query[0]%@</dt>
         </dl>
         <dl>
-            <dd>Tags:</dd>
+            <dd>Categories:</dd>
             <dt>
-                @%for subject%@
-                @%curie:id%@
+                <ul>
+                @%for violationRoot[0].category%@
+                    <li>@%curie:id%@</li>
                 @%/for%@
+                </ul>
+
             </dt>
         </dl>
 <div class="form-actions">
@@ -142,10 +145,13 @@
                     <div class="span12">
                         @%for elements%@
                         <div class="row-fluid facet-item">
-                            <a data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%:label%@</a>
+                            <a data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%curie:label%@</a>
                             <span class="badge badge-info">@%:count%@</span>
                         </div>
                         @%/for%@
+                        <div>
+                            <span>More...</span>
+                        </div>
                     </div>
                 </div>
                 @%/for%@
