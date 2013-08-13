@@ -16,9 +16,11 @@ class TestController extends BaseController {
     public function showTestOverview($test)
     {
 
+        $test = urldecode($test);
+
             return View::make('tests/overview')
                 ->with('title',"Overview of ". $test)
-                ->with('bread', array("path"=>"tests.item","params"=>array("label"=>$test)))
+                ->with('bread', array("path"=>"tests.item","params"=>array("label"=>$test, "test"=>$test)))
                 ->with("mode","item")
                 ->with("test", $test);
 

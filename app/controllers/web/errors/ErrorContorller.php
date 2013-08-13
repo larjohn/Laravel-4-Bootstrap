@@ -46,6 +46,7 @@ class ErrorController extends BaseController {
                 ->with("test", $test);
         }
         else{
+
             return View::make('errors/list')
                 ->with('title',"Errors List")
                 ->with('bread', array('path'=>"tests.item.queries","params"=>array("label"=>"Errors")));
