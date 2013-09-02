@@ -18,17 +18,34 @@ class RDFError extends RDFModel {
     protected static $baseURI       = "nodeID://";
     protected static $type          = "http://spinrdf.org/spin#ConstraintViolation";
     protected static $mapping       = [
-       // 'http://www.w3.org/2000/01/rdf-schema#label' => 'label',
-        'http://debug.dbpedia.org#queryID' => 'query',
-     //   'http://semreco/property/performed' => 'performed'
+        'http://purl.org/dc/terms/#submitted' => 'submitted',
     ];
 
 
     protected static $multiMapping  = [
-
-        "http://purl.org/dc/terms/subject" => [
-            'property' => 'subject',
-            'mapping' => 'RDFSubject', //should be the name of the corresponding class
+        "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#query" => [
+            'property' => 'query',
+            'mapping' => 'RDFQuery', //should be the name of the corresponding class
+            'inverse' => false,
+        ],
+        "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorPropertyContext" => [
+            'property' => 'errorPropertyContext',
+            'mapping' => 'RDFProperty', //should be the name of the corresponding class
+            'inverse' => false,
+        ],
+        "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorClassification" => [
+            'property' => 'errorClassification',
+            'mapping' => 'RDFAccuracyConcept', //should be the name of the corresponding class
+            'inverse' => false,
+        ],
+        "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorSource" => [
+            'property' => 'errorSource',
+            'mapping' => 'RDFSourceConcept', //should be the name of the corresponding class
+            'inverse' => false,
+        ],
+        "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorType" => [
+            'property' => 'errorType',
+            'mapping' => 'RDFErrorType', //should be the name of the corresponding class
             'inverse' => false,
         ],
         "http://spinrdf.org/spin#violationRoot" => [
@@ -38,12 +55,7 @@ class RDFError extends RDFModel {
         ],
 
         "http://spinrdf.org/spin#violationPath" => [
-            'property' => 'inaccurateProperty',
-            'mapping' => 'RDFProperty', //should be the name of the corresponding class
-            'inverse' => false,
-        ],
-        "http://debug.dbpedia.org#test" => [
-            'property' => 'test',
+            'property' => 'violationPath',
             'mapping' => 'RDFProperty', //should be the name of the corresponding class
             'inverse' => false,
         ],
@@ -73,7 +85,7 @@ class RDFError extends RDFModel {
         $sparql->baseUrl = RDFDBpediaResource::getConfig('sparqlmodel.endpoint');
         $sparql->select(RDFDBpediaResource::getConfig('sparqlmodel.graph'));
         $sparql->variable("?offender");
-        $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$this->inaccurateProperty[0]->identifier.">","?offender");
+        $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$this->violationPath[0]->identifier.">","?offender");
 
         $data = $sparql->launch();
         $this->value = $data["results"]["bindings"][0]["offender"]["value"];
@@ -91,13 +103,12 @@ class RDFError extends RDFModel {
 
         $sparql = new SPARQL();
         $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
-        $sparql->describe(SPARQLModel::getConfig('sparqlmodel.graph'));
+        $sparql->describe($test);
         $sparql->variable("?uri");
         $sparql->where('?uri', 'a',  "<".RDFError::getType().">");
-        $sparql->where("?uri", "<http://spinrdf.org/spin#violationRoot>" ,"<".$resource.">");
-        $sparql->where("?uri", "<http://spinrdf.org/spin#violationPath>" ,"<".$property.">");
-        $sparql->where("?uri", "<http://debug.dbpedia.org#test>" ,"<".$test.">");
-        $sparql->where("?uri", "<http://debug.dbpedia.org#queryID>" ,"'".$query."'@en");
+        $sparql->where("?uri","<".self::getUriFromProperty("violationRoot").">" ,"<".$resource.">");
+        $sparql->where("?uri", "<".self::getUriFromProperty("violationPath").">" ,"<".$property.">");
+        $sparql->where("?uri", "<".self::getUriFromProperty("query").">" ,"<".$query.">");
 
         $objects = self::listingFromQuery($sparql, $forProperty = false);
 

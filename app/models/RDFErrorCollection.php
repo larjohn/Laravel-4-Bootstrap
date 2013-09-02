@@ -76,6 +76,7 @@ class RDFErrorCollection
                 $sparql->variable("count(?" . $facet . ") as ?count");
                 $sparql->variable("?" . $facet);
             } else {
+
                 $property_uri = $class::getUriFromProperty($facet[0]);
                 $sparql->where("?uri", "<" . $property_uri . ">", "?" . $facet[0]);
 
@@ -102,8 +103,11 @@ class RDFErrorCollection
 
             $this->applyFilters($sparql);
             $sparql->orderBy("?count", "desc");
+            $sparql->bound(false);
             $sparql->limit($limit);
+
             $data = $sparql->launch();
+            var_dump($sparql->sparql);
 
 
             $facetArray = array();
@@ -203,7 +207,8 @@ class RDFErrorCollection
     {
         $sparql = new SPARQL();
         $sparql->baseUrl = RDFError::getConfig('sparqlmodel.endpoint');
-        $sparql->describe(SPARQLModel::getConfig('sparqlmodel.graph'));
+        $sparql->bound(false);
+        $sparql->describe("?g");
         $sparql->variable("?" . 'uri');
         $sparql->where('?uri', 'a', "<" . RDFError::getType() . ">");
         if (count($sortProperty) > 0) {

@@ -12,7 +12,7 @@ class RDFErrorController extends BaseController
     public  function getLatest(){
        // $collection = new RDFErrorCollection();
 
-        return Response::json(array("name"=>"http://dbpedia.org/debug/Test-20130617"));
+        return Response::json(array("name"=>"http://debug.dbpedia.org/tests/20130617"));
     }
     public function getFacets(){
 
@@ -59,7 +59,7 @@ class RDFErrorController extends BaseController
             if (!is_a($rdf_object, "RDFError")) continue;
 
             $rdf_errors[] = $rdf_object;
-            if (isset($rdf_object->violationRoot)) {
+/*            if (isset($rdf_object->violationRoot)) {
                 $violation_roots = $rdf_object->violationRoot;
                 $dbpedia_resources = array_merge($dbpedia_resources, $violation_roots);
             }
@@ -67,11 +67,11 @@ class RDFErrorController extends BaseController
                 $violation_paths = $rdf_object->inaccurateProperty;
 
                 $dbpedia_properties = array_merge($dbpedia_properties, $violation_paths);
-            }
+            }*/
         }
 
-        RDFDBpediaResource::lazyLoad($dbpedia_resources, ["label"]);
-        RDFProperty::lazyLoad($dbpedia_properties,["label"]);
+   //     RDFDBpediaResource::lazyLoad($dbpedia_resources, ["label"]);
+   //     RDFProperty::lazyLoad($dbpedia_properties,["label"]);
 
         foreach ($rdf_errors as $rdf_error) {
 

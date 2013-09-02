@@ -12,7 +12,7 @@ class RDFTestController extends BaseController
     public  function getLatest(){
        // $collection = new RDFErrorCollection();
 
-        return Response::json(array("name"=>"dbgtests:Test-20130617"));
+        return Response::json(array("name"=>"dbt:20130617"));
     }
 
 

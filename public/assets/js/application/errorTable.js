@@ -1,11 +1,24 @@
 $.views.settings.delimiters("@%", "%@");
 var data_page = {};
-
-
-function tagsFormatter(cellvalue, options, rowObject) {
-    return cellvalue[0].id;
+function prefix(uri){
+    try{
+        return VIE.Util.toCurie("<" + uri + ">", false, namespaces);
+    }
+    catch(Error){
+        return uri;
+    }
 }
 
+function unprefix(curie){
+    try{
+        var uri =  VIE.Util.toUri( curie , namespaces);
+        uri= uri.substring(1, uri.length-1);
+        return uri;
+    }
+    catch(Error){
+        return curie;
+    }
+}
 
 function fillData() {
     $.getJSON(appRoot + 'api/error/facets', error_filters, function (data) {
@@ -25,27 +38,41 @@ function fillData() {
         height: 'auto',
         postData: {
             filters:  error_filters
-
         },
         autowidth: true,
         datatype: "json",
         mtype: "GET",
-        colNames: ["Select", "Actions", "Resource", "Property", "query"],
+        colNames: ["Actions", "Resource", "Property", "Query"],
         colModel: [
-            {name: 'checkbox', index: 'checkbox', formatter: "checkbox", formatoptions: { disabled: false } },
+         //   {name: 'checkbox', index: 'checkbox', formatter: "checkbox", formatoptions: { disabled: false } },
 
             { name: "view", formatter: function (cellvalue, options, rowObject) {
-                return '<a href="#myModal" role="button" class="btn btn-info view-item" data-row="' + options.rowId + '" data-resource="' + rowObject.violationRoot[0].id + '" data-property="' + rowObject.inaccurateProperty[0].id + '" data-test="' + rowObject.test[0].id + '"  data-query="' + rowObject.query + '"    data-toggle="modal">Details</a>';
+                return '<a href="#myModal" role="button" class="btn btn-info view-item" data-row="' + options.rowId + '" data-resource="' + rowObject.violationRoot[0].id + '" data-property="' + rowObject.violationPath[0].id + '" data-test="' + test_item + '"  data-query="' + rowObject.query + '"    data-toggle="modal">Details</a>';
             } },
             { name: "violationRoot.0.id", formatter: function (cellvalue, options, rowObject) {
                 var decoded = decodeURIComponent(cellvalue);
-                var abbr = VIE.Util.toCurie("<" + decoded + ">", false, namespaces);
-                return "<span title='" + rowObject.violationRoot[0].label + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.violationRoot[0].label + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
+                var abbr = prefix(decoded);
+                return "<span title='" + rowObject.violationRoot[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.violationRoot[0].id + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
 
             } },
-            { name: "inaccurateProperty.0.label", align: "right" },
+            { name: "violationPath.0.id", align: "right",
+                formatter: function (cellvalue, options, rowObject) {
+                    var decoded = decodeURIComponent(cellvalue);
+                    var abbr = prefix(decoded);
+                    return "<span title='" + rowObject.violationPath[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.violationPath[0].id + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
+
+                }
+            },
             // { name: "test.0.id",  align: "right" },
-            { name: "query", align: "right" }
+            { name: "query.0.id", align: "right",
+                formatter: function (cellvalue, options, rowObject) {
+                    if(rowObject.query==undefined)return "";
+                    var decoded = decodeURIComponent(cellvalue);
+                    var abbr = prefix(decoded );
+                    return "<span title='" + rowObject.query[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.query[0].id + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
+
+                }
+            }
 
         ],
         jsonReader: {
@@ -60,8 +87,8 @@ function fillData() {
             data_page = data;
         },
         pager: "#pager",
-        rowNum: 10,
-        rowList: [10, 20, 30],
+        rowNum: 50,
+        rowList: [ 25, 50, 100],
         sortname: "id",
         sortorder: "desc",
         viewrecords: true,
@@ -147,9 +174,9 @@ $(document).ready(function () {
         var errorsTemplate = $.templates("#itemTmpl");
         var row = data_page.errors[rowId - 1];
         var params = {resource: row.violationRoot[0].id,
-            property: row.inaccurateProperty[0].id,
-            query: row.query[0],
-            test: row.test[0].id
+            property: row.violationPath[0].id,
+            query: row.query[0].id,
+            test: unprefix(test_item)
         };
 
         $("#errorModal").modal({}).toggleClass('loading', true);

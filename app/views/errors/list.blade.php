@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 <script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
-<script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
+
 <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
 
@@ -50,6 +50,7 @@
 
 
 </script>
+<script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
 <script src="{{{ asset('assets/js/jstree/jquery.jstree.js') }}}" type="text/javascript"></script>
 <link href="{{{ asset('assets/css/jstree/themes/default/style.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 <link href="{{{ asset('assets/css/ui.jqgrid.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
@@ -81,19 +82,15 @@
         </dl>
         <dl>
             <dd>Property:</dd>
-            <dt>@%curie:inaccurateProperty[0].id%@</dt>
+            <dt>@%curie:violationPath[0].id%@</dt>
         </dl>
         <dl class="alert alert-error">
             <dd>Value:</dd>
             <dt>@%:value%@</dt>
         </dl>
         <dl>
-            <dd>Test:</dd>
-            <dt>@%curie:test[0].id%@</dt>
-        </dl>
-        <dl>
             <dd>Query:</dd>
-            <dt>@%:query[0]%@</dt>
+            <dt>@%:query[0].id%@</dt>
         </dl>
         <dl>
             <dd>Categories:</dd>
