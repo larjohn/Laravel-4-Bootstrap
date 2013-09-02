@@ -107,7 +107,7 @@ class RDFErrorCollection
             $sparql->limit($limit);
 
             $data = $sparql->launch();
-            var_dump($sparql->sparql);
+            //var_dump($sparql->sparql);
 
 
             $facetArray = array();
