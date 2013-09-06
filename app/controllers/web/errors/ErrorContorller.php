@@ -36,7 +36,6 @@ class ErrorController extends BaseController {
     {
         //$res =  RDFDBpediaResource::find('http://dbpedia.org/resource/Family_Without_a_Name'); // Same as new User::find('http://semreco/person/damien_legrand');
 
-
         // var_dump($res->label);
         if(isset($test)){
             return View::make('errors/list')

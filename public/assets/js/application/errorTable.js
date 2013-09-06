@@ -20,24 +20,36 @@ function unprefix(curie){
     }
 }
 
+function setFacets(data){
+    var facets = [];
+    $.each(data, function () {
+        facets.push(this);
+
+    });
+    var app = {
+        facets: facets
+    };
+    var facetsTemplate = $.templates("#facetTmpl");
+
+    facetsTemplate.link("#facets", app);
+
+
+}
+
+
+
+
 function fillData() {
     $.getJSON(appRoot + 'api/error/facets', error_filters, function (data) {
-        var facets = [];
-        $.each(data, function () {
-            facets.push(this);
-        });
-        var app = {
-            facets: facets
-        };
-        var facetsTemplate = $.templates("#facetTmpl");
-        facetsTemplate.link("#facets", app);
+       setFacets(data);
     });
 
     $("#list").jqGrid({
         url: appRoot + "api/error",
         height: 'auto',
         postData: {
-            filters:  error_filters
+            filters:  error_filters,
+            test: unprefix(test_item)
         },
         autowidth: true,
         datatype: "json",
@@ -69,7 +81,7 @@ function fillData() {
                     if(rowObject.query==undefined)return "";
                     var decoded = decodeURIComponent(cellvalue);
                     var abbr = prefix(decoded );
-                    return "<span title='" + rowObject.query[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.query[0].id + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
+                    return "<span title='" + rowObject.query[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.query[0].id + "' target='_blank'>   <i class='icon-external-link'></i></a>"
 
                 }
             }
@@ -85,6 +97,7 @@ function fillData() {
         },
         loadComplete: function (data) {
             data_page = data;
+            setFacets(data.facets)
         },
         pager: "#pager",
         rowNum: 50,
@@ -125,9 +138,6 @@ $(document).ready(function () {
 
     if (mode == "latest") {
         $.getJSON(appRoot + 'api/tests/latest', function (data) {
-
-
-            error_filters["test"] = {value: data.name, name: "test", "operator": "="};
             fillData();
             var shortened = VIE.Util.toCurie("<" + data.name + ">", false, namespaces);
             $("#test_name").html("<a href='" + appRoot + "tests/item/"+encodeURIComponent(shortened)+"'>"+data.name+"</a>");
@@ -135,12 +145,9 @@ $(document).ready(function () {
         });
     }
     else if(mode=="item"){
-            error_filters["test"] = {value: test_item, name: "test", "operator": "="};
+
             fillData();
            // var shortened = VIE.Util.toCurie("<" + test_item + ">", false, namespaces);
-
-
-
     }
     else{
         fillData();
@@ -162,7 +169,6 @@ $(document).ready(function () {
 
     jQuery.ajaxSetup({
         dataFilter: function (data, dataType) {
-
             return data;
         }
     });
@@ -197,7 +203,7 @@ $(document).ready(function () {
         $(event.target).parents(".facet").find(".facet-item").toggleClass("selected", false);
         delete error_filters[$(event.target).parent(".revert").attr("data-facet")];
         $("#list").setGridParam({postData: null});
-        $('#list').setGridParam({ postData: {filters: error_filters} }).trigger('reloadGrid');
+        $('#list').setGridParam({ postData: {filters: error_filters, test:unprefix(test_item)}  }).trigger('reloadGrid');
     });
 
     $(document).on("click", '.facet-item a', function (event) {
@@ -206,7 +212,7 @@ $(document).ready(function () {
         $(event.target).parents(".facet").toggleClass("active", true);
         error_filters[$(event.target).attr("data-facet")] = {name: $(event.target).attr("data-facet"), operator: "=", value: $(event.target).attr("data-facet-value")};
 
-        $('#list').setGridParam({ postData: {filters: error_filters} }).trigger('reloadGrid');
+        $('#list').setGridParam({ postData: {filters: error_filters, test:unprefix(test_item)} }).trigger('reloadGrid');
     });
 
 

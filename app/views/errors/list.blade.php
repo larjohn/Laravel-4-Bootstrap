@@ -131,17 +131,15 @@
             <div id="pager"></div>
             <!--Body content-->
         </div>
-        <div class="span3 text-right" id="facets">
-
-            <script id="facetTmpl" type="text/x-jsrender">
+        <script id="facetTmpl" type="text/x-jsrender">
 
                 @%for facets%@
-                <div class="row-fluid facet">
+                <div class="row-fluid facet @%:state%@">
                     <h4><a class="revert" data-facet="@%:title%@"><i class="icon-undo"></i></a> @%:title%@ </h4>
 
                     <div class="span12">
                         @%for elements%@
-                        <div class="row-fluid facet-item">
+                        <div class="row-fluid facet-item @%:state%@">
                             <a data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%curie:label%@</a>
                             <span class="badge badge-info">@%:count%@</span>
                         </div>
@@ -153,6 +151,9 @@
                 </div>
                 @%/for%@
             </script>
+        <div class="span3 text-right" id="facets">
+
+
             <!--Sidebar content-->
         </div>
     </div>

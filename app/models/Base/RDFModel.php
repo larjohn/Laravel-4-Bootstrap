@@ -19,9 +19,11 @@ public static  function getUriFromProperty($property){
         }
     }
     if($propertyUri=="")
+
         foreach($class::$multiMapping as $propURI=>$map){
 
             if($map['property'] == $property){
+
                 $propertyUri = $propURI;
                 break;
             }

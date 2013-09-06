@@ -82,13 +82,17 @@ class RDFError extends RDFModel {
 
     public function load_value(){
         $sparql = new SPARQL();
-        $sparql->baseUrl = RDFDBpediaResource::getConfig('sparqlmodel.endpoint');
-        $sparql->select(RDFDBpediaResource::getConfig('sparqlmodel.graph'));
+        $sparql->baseUrl = RDFDBpediaResource::getConfig('sparqlmodel.resources-endpoint');
+        $sparql->select(null);
         $sparql->variable("?offender");
         $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$this->violationPath[0]->identifier.">","?offender");
 
         $data = $sparql->launch();
-        $this->value = $data["results"]["bindings"][0]["offender"]["value"];
+
+        foreach($data["results"]["bindings"] as $result){
+            $this->value[] = $result["offender"]["value"];
+        }
+
 
 
     }
@@ -117,7 +121,13 @@ class RDFError extends RDFModel {
             else return NULL;
         });
 
-        return reset($error);
+        $error = reset($error);
+        //var_dump($error->violationRoot[0]->identifier);die;
+        RDFDBpediaResource::lazyLoad(array($error->violationRoot[0]), ["category"]);
+
+
+
+        return $error;
 
     }
 

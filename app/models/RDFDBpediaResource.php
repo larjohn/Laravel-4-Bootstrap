@@ -35,7 +35,7 @@ class RDFDBpediaResource extends RDFModel {
                 return 'http://dbpedia.org/sparql';
             }
             case 'sparqlmodel.graph':{
-                return 'http://dbpedia.org';
+                return 'http://debug.dbpedia.org/resources';
             }
             default:{
             return Config::get($setting);

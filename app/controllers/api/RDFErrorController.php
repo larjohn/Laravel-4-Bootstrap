@@ -16,9 +16,9 @@ class RDFErrorController extends BaseController
     }
     public function getFacets(){
 
-
+        $test = Input::get('test', null);
         $collection = new RDFErrorCollection();
-        $facets = $collection->getFacets();
+        $facets = $collection->getFacets($test);
         return Response::json($facets);
 
     }
@@ -34,26 +34,25 @@ class RDFErrorController extends BaseController
         $page =  Input::get('page', 0);
         $sort = Input::get('sidx', "");
         $order = Input::get('sord', "asc");
+        $test = Input::get('test', null);
         $filters = Input::get('filters', array());
 
 
 
-        if(isset($test))
-            $filters["test"] = array("name"=>"test", "operator"=>"=","value"=>EasyRdf_Namespace::expand($test["value"]));
-        //var_dump($test);
+         //var_dump($test);
         //var_dump(EasyRdf_Namespace::expand($test["value"]));
         $sortProperties = self::getSorter($sort);
         $collection = new RDFErrorCollection();
         //var_dump($filters);//die;
         $collection->setFilters($filters);
-        $all = $collection->getAll($page,$limit, $sortProperties,$order);
+        $all = $collection->getAll($test, $page-1,$limit, $sortProperties,$order);
 
-        $facets = $collection->getFacets();
+        $facets = $collection->getFacets($test);
         $rdf_objects = $all["data"];
         $rdf_errors = array();
         $errors = array();
-        $dbpedia_resources = array();
-        $dbpedia_properties = array();
+       // $dbpedia_resources = array();
+        //$dbpedia_properties = array();
 
         foreach ($rdf_objects as $rdf_object) {
             if (!is_a($rdf_object, "RDFError")) continue;
@@ -83,7 +82,7 @@ class RDFErrorController extends BaseController
         $count = $all["count"];
         $output = array(
             "page"=>$page,
-            "total"=>ceil($count/$limit)-1,
+            "total"=>ceil($count/$limit),
             "records"=>$count,
             "errors"=>$errors,
             "facets"=>$facets,
@@ -111,7 +110,7 @@ class RDFErrorController extends BaseController
         $test = Input::get('test', "");
         $query = Input::get('query', "");
         $rdf_error =  RDFError::findTriple($resource,$property,$test,$query);
-
+//var_dump($rdf_error);die;
         if($rdf_error) $rdf_error->load_value();
 
         $error = $rdf_error->toArray(true);
