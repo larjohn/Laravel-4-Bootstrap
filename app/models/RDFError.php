@@ -80,17 +80,20 @@ class RDFError extends RDFModel {
         parent::save($moreData);
     }
 
-    public function load_value(){
+    public function load_value($path, $name= "offender" ){
         $sparql = new SPARQL();
         $sparql->baseUrl = RDFDBpediaResource::getConfig('sparqlmodel.resources-endpoint');
         $sparql->select(null);
-        $sparql->variable("?offender");
-        $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$this->violationPath[0]->identifier.">","?offender");
+        $sparql->variable("?".$name);
+        $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$path.">","?".$name);
 
         $data = $sparql->launch();
 
+        if(!isset($this->value[$name]))
+            $this->value[$name]= array();
+
         foreach($data["results"]["bindings"] as $result){
-            $this->value[] = $result["offender"]["value"];
+            $this->value[$name][] = array("path" => $path, "value" => $result[$name]["value"]);
         }
 
 
@@ -123,9 +126,9 @@ class RDFError extends RDFModel {
 
         $error = reset($error);
         //var_dump($error->violationRoot[0]->identifier);die;
-        RDFDBpediaResource::lazyLoad(array($error->violationRoot[0]), ["category"]);
+        RDFDBpediaResource::lazyLoad(array($error->violationRoot[0]), ["category"],    RDFError::getConfig('sparqlmodel.endpoint'));
 
-
+       // var_dump($error);
 
         return $error;
 

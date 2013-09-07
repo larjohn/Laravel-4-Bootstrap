@@ -85,8 +85,20 @@
             <dt>@%curie:violationPath[0].id%@</dt>
         </dl>
         <dl class="alert alert-error">
-            <dd>Value:</dd>
-            <dt>@%:value%@</dt>
+            <dd>Value (@%curie:value.offender[0].path%@):</dd>
+            <dt>@%:value.offender[0].value%@</dt>
+        </dl>
+        <dl class="alert alert-warning">
+            <dd>Context</dd>
+            <dt>
+                <ul>
+                @%for value.context%@
+
+                    <li>@%curie:path%@: @%curie:value%@</li>
+                @%/for%@
+                </ul>
+
+
         </dl>
         <dl>
             <dd>Query:</dd>

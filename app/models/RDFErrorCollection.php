@@ -19,7 +19,14 @@ class RDFErrorCollection
     /**
      * @var array
      */
-    public static $enabledFacets = array("query", array("violationRoot", "category"),"errorClassification");
+    public static $enabledFacets = array(
+        "query",
+        array("violationRoot", "category"),
+        "errorClassification",
+        "errorSource",
+        "errorType",
+
+    );
     /**
      * @var array
      */

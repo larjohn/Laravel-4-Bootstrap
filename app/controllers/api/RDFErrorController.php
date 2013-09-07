@@ -110,9 +110,17 @@ class RDFErrorController extends BaseController
         $test = Input::get('test', "");
         $query = Input::get('query', "");
         $rdf_error =  RDFError::findTriple($resource,$property,$test,$query);
-//var_dump($rdf_error);die;
-        if($rdf_error) $rdf_error->load_value();
 
+        if($rdf_error) {
+            $rdf_error->load_value($rdf_error->violationPath[0]->identifier);
+            if(isset($rdf_error->errorPropertyContext)){
+                foreach($rdf_error->errorPropertyContext as $context){
+                    $rdf_error->load_value($context->identifier,"context");
+                }
+            }
+
+        }
+       // var_dump($rdf_error);die;
         $error = $rdf_error->toArray(true);
 
         return Response::json($error);
