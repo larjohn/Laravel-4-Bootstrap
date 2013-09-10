@@ -29,7 +29,7 @@ Route::group(array('prefix' => 'tests'), function()
         Route::get('/',array("as"=>"tests.item", "uses"=>'TestController@showTestOverview'));
         Route::get('/all',array("as"=>"tests.item.all", "uses"=>'ErrorController@showTestIndex'));
         Route::get('/type',array("as"=>"tests.item.type", "uses"=>'ErrorController@showTestIndex'));
-        Route::get('/query',array("as"=>"tests.item.queries", "uses"=>'ErrorController@showQueryIndex'));
+        Route::get('/category',array("as"=>"tests.item.categories", "uses"=>'ErrorController@showCategoryIndex'));
 
     });
 

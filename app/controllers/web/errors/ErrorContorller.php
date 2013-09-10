@@ -54,10 +54,10 @@ class ErrorController extends BaseController {
     }
 
 
-    public function showQueryIndex($test){
+    public function showCategoryIndex($test){
         return View::make('errors/treemap')
-            ->with('title', "Errors by query")
-            ->with('bread', array('path'=>"tests.item.queries","params"=>array("test"=>$test,"label"=>"Queries")))
+            ->with('title', "Errors by category")
+            ->with('bread', array('path'=>"tests.item.categories","params"=>array("test"=>$test,"label"=>"Categories")))
             ->with('test',$test);
     }
 

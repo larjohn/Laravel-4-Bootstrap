@@ -3,9 +3,11 @@ return array(
     "ns" => "http://debug.dbpedia.org/",
     "namespaces" => array(
         "dbo" => "http://dbpedia.org/ontology/",
+        "dbc" => "http://dbpedia.org/resource/Category:",
         "dbr" => "http://dbpedia.org/resource/",
         "dbp" => "http://dbpedia.org/property/",
         "dbt" => "http://debug.dbpedia.org/tests/",
+
         "dcterms" => "http://purl.org/dc/terms/",
         "spinrdf" => "http://spinrdf.org/spin#",
         "rdfs" => "http://www.w3.org/2000/01/rdf-schema#",

@@ -15,5 +15,9 @@ class RDFTestController extends BaseController
         return Response::json(array("name"=>"dbt:20130617"));
     }
 
+    public function getCategories(){
+
+        return Response::json(RDFSubject::getCategories());
+    }
 
 }

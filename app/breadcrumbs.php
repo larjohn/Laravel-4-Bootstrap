@@ -14,10 +14,10 @@ Breadcrumbs::register('tests.item', function($breadcrumbs, $params) {
     $breadcrumbs->push($params["test"], URL::route('tests.item',$params["label"]));
 });
 
-Breadcrumbs::register('tests.item.queries', function($breadcrumbs, $params) {
+Breadcrumbs::register('tests.item.categories', function($breadcrumbs, $params) {
 
     $breadcrumbs->parent('tests.item',$params);
-    $breadcrumbs->push($params["label"], URL::route('tests.item.queries',$params["test"]));
+    $breadcrumbs->push($params["label"], URL::route('tests.item.categories',$params["test"]));
 });
 
 Breadcrumbs::register('tests.item.all', function($breadcrumbs, $params) {

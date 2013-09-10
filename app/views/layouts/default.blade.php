@@ -93,30 +93,7 @@
                             <i class="icon-resize-horizontal"></i>
                         </a>
                     </div>
-                    <div class="btn-group">
-                        <a class="btn btn-inverse" rel="tooltip" data-original-title="Select Test" data-placement="bottom">
-                            <i class="icon-ellipsis-vertical"></i>
-                            <span class="label label-warning">5</span>
-                        </a>
-                        <a class="btn btn-inverse" rel="tooltip" href="#" data-original-title="Messages"
-                           data-placement="bottom">
-                            <i class="icon-comments"></i>
-                            <span class="label label-important">4</span>
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-inverse" rel="tooltip" href="#" data-original-title="Document"
-                           data-placement="bottom">
-                            <i class="icon-file"></i>
-                        </a>
-                        <a href="#helpModal" class="btn btn-inverse" rel="tooltip" data-placement="bottom"
-                           data-original-title="Help" data-toggle="modal">
-                            <i class="icon-question-sign"></i>
-                        </a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
-                           href="login.html"><i class="icon-off"></i></a></div>
+
                 </div>
                 <!-- /.topnav -->
                 <div class="nav-collapse collapse">
@@ -169,10 +146,10 @@
         </a>
 
         <div class="media-body hidden-tablet">
-            <h5 class="media-heading">You</h5>
+            <h5 class="media-heading">{{$test}}</h5>
             <ul class="unstyled user-info">
-                <li><a href="">Administrator</a></li>
-                <li>Last Access : <br/>
+                <li><a href="">Full Test</a></li>
+                <li>Execution Date: <br/>
                     <small><i class="icon-calendar"></i> 16 Mar 16:32</small>
                 </li>
             </ul>
@@ -182,19 +159,10 @@
 
     <!-- BEGIN MAIN NAVIGATION -->
     <ul id="menu" class="unstyled accordion collapse in">
+
         <li class="accordion-group active">
-            <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#dashboard-nav">
-                <i class="icon-dashboard icon-large"></i> Validation Test <span
-                    class="label label-inverse pull-right">2</span>
-            </a>
-            <ul class="collapse in" id="dashboard-nav">
-                 <li><a href="{{{URL::to('tests/item/'.$test)}}}"><i class="icon-angle-right"></i> Overview </a></li>
-            </ul>
-        </li>
-        <li class="accordion-group active">
-                    <a data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#dashboard-nav">
-                        <i class="icon-dashboard icon-large"></i> Browse Errors <span
-                            class="label label-inverse pull-right">2</span>
+                    <a data-parent="#menu" >
+                        <i class="icon-bug icon-large"></i> Browse Errors
                     </a>
                     <ul class="collapse in" id="dashboard-nav">
                         <li><a href="{{{URL::to('tests/item/'.$test.'/all')}}}"><i class="icon-angle-right"></i> all </a></li>
