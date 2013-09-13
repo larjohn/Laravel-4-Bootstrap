@@ -17,7 +17,9 @@ class RDFTestController extends BaseController
 
     public function getCategories(){
 
-        return Response::json(RDFSubject::getCategories());
+        $test = Input::get('test', null);
+        $category = Input::get('category', null);
+        return Response::json(RDFSubject::getCategories($test,$category));
     }
 
 }

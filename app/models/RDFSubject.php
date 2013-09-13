@@ -19,7 +19,7 @@ class RDFSubject extends SPARQLModel
     ];
 
 
-    public static function getCategories($category=null, $depth=6)
+    public static function getCategories($test, $category=null, $depth=6)
     {
         $sparql = new SPARQL();
         $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
@@ -37,9 +37,14 @@ class RDFSubject extends SPARQLModel
             for($j=1; $j<$i; $j++){
                 $sp->where("?cm".$i."_".$j, "<http://www.w3.org/2004/02/skos/core#broader>","?cm".$i."_".( $j-1));
             }
-            $sp->where("?cm0", "<http://www.w3.org/2004/02/skos/core#broader>", "?c0");
-            $sp->filterNotExists("?c0 <http://www.w3.org/2004/02/skos/core#broader> ?z");
+            if(isset($category))
+                $sp->where("?c0", "<http://www.w3.org/2004/02/skos/core#broader>", "<".$category.">");
+            else
+                $sp->filterNotExists("?c0 <http://www.w3.org/2004/02/skos/core#broader> ?z");
 
+            $sp->where("?cm0", "<http://www.w3.org/2004/02/skos/core#broader>", "?c0");
+
+            $sp->filterExists("GRAPH<$test> {?err <http://spinrdf.org/spin#violationRoot> ?res}");
             $sp->where("?res","<http://purl.org/dc/terms/subject>","?cm".$i."_".( $j-1));
             $sparql->union($sp);
             $optWheres[$i]= $sp;
@@ -53,16 +58,13 @@ class RDFSubject extends SPARQLModel
 
         $sparql->select(null);
         if(isset($category))
-            $sparql->where("?cm0", "<http://www.w3.org/2004/02/skos/core#broader>", "<".$category.">");
+            $sparql->where("?c0", "<http://www.w3.org/2004/02/skos/core#broader>", "<".$category.">");
         else
-        {
-            $sparql->where("?cm0", "<http://www.w3.org/2004/02/skos/core#broader>", "?c0");
-            $sparql->filterNotExists("?c0 <http://www.w3.org/2004/02/skos/core#broader> ?z");
+           $sparql->filterNotExists("?c0 <http://www.w3.org/2004/02/skos/core#broader> ?z");
 
-        }
-
+        $sparql->where("?cm0", "<http://www.w3.org/2004/02/skos/core#broader>", "?c0");
         $sparql->optionalWhere("?res","<http://purl.org/dc/terms/subject>" ,"?cm0");
-        $sparql->union($sp);
+
 
         $sparql->variable("COUNT(?res) as ?count");
         $sparql->variable("?cm0");
@@ -78,29 +80,31 @@ class RDFSubject extends SPARQLModel
       //  $sparql->variable("?".$name);
 
        // $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$path.">","?".$name);
-
+     //var_dump($sparql->getQuery());die;
         $data = $sparql->launch();
-        //var_dump($data);
+
+      //  var_dump($data);
 
     //    if(!isset($this->value[$name]))
            // $this->value[$name]= array();
 
         $index = array();
         foreach($data["results"]["bindings"] as $result){
-            if(isset($index[$result["c0"]["value"]])){
+
+            if(!isset($index[$result["c0"]["value"]])){
+                $index[$result["c0"]["value"]] = array("children"=>array(), "size"=>0);
+            }
                 $index[$result["c0"]["value"]]["children"][]=
                     array(
-                        "id"=> $result["cm0"]["value"],
+                        "id"=> EasyRdf_Namespace::shorten($result["c0"]["value"]). "~".$result["cm0"]["value"],
                         "name"=>EasyRdf_Namespace::shorten($result["cm0"]["value"]),
                         "size"=>$result["count"]["value"]);
                 $index[$result["c0"]["value"]]["size"]+=$result["count"]["value"];
                 $index[$result["c0"]["value"]]["id"]=$result["c0"]["value"];
                 $index[$result["c0"]["value"]]["name"]=EasyRdf_Namespace::shorten($result["c0"]["value"]);
 
-            }
-            else{
-                $index[$result["c0"]["value"]] = array("children"=>array(), "size"=>0);
-            }
+
+
         }
 
 
@@ -111,6 +115,8 @@ class RDFSubject extends SPARQLModel
 
 
 
+
+      //  var_dump($index);die;
 
 
 

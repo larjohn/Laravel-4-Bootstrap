@@ -63,7 +63,7 @@ var node;
 var treemap = d3.layout.treemap()
     .round(false)
     .size([chartWidth, chartHeight])
-    .sticky(true)
+    .sticky(false)
     .padding([headerHeight + 1, 1, 1, 1])
     .value(function (d) {
         return d.size;
@@ -90,8 +90,8 @@ grandparent.append("text")
     .attr("x", 6)
     .attr("y", 6 - margin.top)
     .attr("dy", ".75em");
-
-d3.json(appRoot + "api/tests/categories", function (data) {
+var test_item = "{{EasyRdf_Namespace::expand($test)}}"
+d3.json(appRoot + "api/tests/categories?test="+test_item, function (data) {
 
     $("#loading").hide();
     node = root = data;
@@ -169,7 +169,15 @@ d3.json(appRoot + "api/tests/categories", function (data) {
         .append("g")
         .attr("class", "cell child")
         .on("click", function (d) {
-            zoom(node === d.parent ? root : d.parent);
+           // zoom(node === d.parent ? root : d.parent);
+            var id =d.id.split("~")[1];
+            d3.json(appRoot + "api/tests/categories?test="+test_item+"&category="+id, function(error, json) {
+                if (error) return console.warn(error);
+                data = json;
+                //treemap.nodes(data);
+                zoom(data);
+
+            });
         });
     childEnterTransition.append("rect")
         .classed("background", true)
@@ -185,6 +193,8 @@ d3.json(appRoot + "api/tests/categories", function (data) {
             return d.dy / 2;
         })
         .attr("dy", ".35em")
+        .attr("onclick", "javascript:alert('lol')")
+
         .attr("text-anchor", "middle")
         .style("display", "none")
         .text(function (d) {

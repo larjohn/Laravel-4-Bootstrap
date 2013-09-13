@@ -55,6 +55,7 @@ class ErrorController extends BaseController {
 
 
     public function showCategoryIndex($test){
+
         return View::make('errors/treemap')
             ->with('title', "Errors by category")
             ->with('bread', array('path'=>"tests.item.categories","params"=>array("test"=>$test,"label"=>"Categories")))
