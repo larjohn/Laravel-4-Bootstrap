@@ -79,7 +79,8 @@
                                 queue: false
                             });
                         }, 2000);
-                        var facets = searchCollection.facets[]
+
+                        
                         jQuery.getJSON(appRoot+"api/tests/errors", {test:test_item, resource:searchCollection.Resource,type:searchCollection.Type,class:searchCollection.Classification,source:searchCollection.Source,query:searchCollection.Query}, function( data ) {
                                 callback(data);
                             }
