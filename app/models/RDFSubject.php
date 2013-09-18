@@ -29,7 +29,6 @@ class RDFSubject extends SPARQLModel
 
             $sp = new SPARQL();
 
-           // echo 'lol'.$i;
             $sp->where("?cm".$i."_"."0", "<http://www.w3.org/2004/02/skos/core#broader>","?cm0");
 
 
@@ -70,7 +69,9 @@ class RDFSubject extends SPARQLModel
         $sparql->variable("?cm0");
         $sparql->variable("?c0");
         $sparql->groupby("?c0 ?cm0");
-        $sparql->having("count(?res)>65");
+        $sparql->having("count(?res)>0");
+        $sparql->orderBy("count(?res)", "desc");
+        $sparql->limit(30);
 
 
 
@@ -80,7 +81,7 @@ class RDFSubject extends SPARQLModel
       //  $sparql->variable("?".$name);
 
        // $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$path.">","?".$name);
-     //var_dump($sparql->getQuery());die;
+    //var_dump($sparql->getQuery());die;
         $data = $sparql->launch();
 
       //  var_dump($data);
@@ -98,8 +99,8 @@ class RDFSubject extends SPARQLModel
                     array(
                         "id"=> EasyRdf_Namespace::shorten($result["c0"]["value"]). "~".$result["cm0"]["value"],
                         "name"=>EasyRdf_Namespace::shorten($result["cm0"]["value"]),
-                        "size"=>$result["count"]["value"]);
-                $index[$result["c0"]["value"]]["size"]+=$result["count"]["value"];
+                        "value"=>intval($result["count"]["value"]));
+                //$index[$result["c0"]["value"]]["value"]+=$result["count"]["value"];
                 $index[$result["c0"]["value"]]["id"]=$result["c0"]["value"];
                 $index[$result["c0"]["value"]]["name"]=EasyRdf_Namespace::shorten($result["c0"]["value"]);
 
@@ -109,64 +110,25 @@ class RDFSubject extends SPARQLModel
 
 
 
-        $categories = array("id" => "0",
-            "name" => "categories",
+        if(isset($category)){
+            $name = EasyRdf_Namespace::shorten($category);
+            $id = $category;
+
+        }
+
+        else {
+            $name = "categories";
+            $id="0";
+        }
+
+
+
+        $categories = array("id" => $id,
+            "name" => $name,
             "children" => array_values($index));
 
 
 
-
-      //  var_dump($index);die;
-
-
-
-
-
-
-
-
-
-       /* $categories = array(
-            "id" => "0",
-            "name" => "categories",
-            "children" => array(
-                array(
-                    "id" => 5,
-                    "name" => "People",
-
-                    "children" => array(
-                        array(
-                            "id" => 10,
-                            "name" => "Famous People",
-                            "size" => 17,
-                        ),
-                        array(
-                            "id" => 166,
-                            "name" => "Singers",
-                            "size" => 13,
-                        )
-                    )
-                ),
-                array(
-                    "id" => 9,
-                    "name" => "Institutes",
-                    "children" => array(
-                        array(
-                            "id" => 1332,
-                            "name" => "Companies",
-                            "size" => 27,
-                        ),
-                        array(
-                            "id" => 163,
-                            "name" => "Universities",
-                            "size" => 3,
-                        )
-                    )
-                )
-            ),
-
-
-        );*/
         return $categories;
     }
 

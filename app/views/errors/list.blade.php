@@ -1,8 +1,8 @@
-@extends('layouts.default')
+@extends('layouts.test')
 @section('content')
 
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
-<script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
+
 <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
 
 <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>

@@ -49,6 +49,9 @@
     <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.position.js') }}}"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/jqueryui/jquery.ui.menu.js') }}}"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/application/main.js') }}}"></script>
+    <script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
+    <script type="text/javascript" src="{{{ asset('assets/js/application/ladybug.js') }}}"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -84,7 +87,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="{{URL::to('')}}">metamin:DBpedia Validation</a>
+                <a class="brand" href="{{URL::to('')}}"></a>
                 <!-- .topnav -->
                 <div class="btn-toolbar topnav">
                     <div class="btn-group">
@@ -139,42 +142,7 @@
 <!-- BEGIN LEFT  -->
 <div id="left">
     <!-- .user-media -->
-    <div class="media user-media hidden-phone">
-        <a href="" class="user-link">
-            <img src="{{{ asset('assets/img/user.gif') }}}" alt="" class="media-object img-polaroid user-img">
-            <span class="label user-label">16</span>
-        </a>
-
-        <div class="media-body hidden-tablet">
-            <h5 class="media-heading">{{$test}}</h5>
-            <ul class="unstyled user-info">
-                <li><a href="">Full Test</a></li>
-                <li>Execution Date: <br/>
-                    <small><i class="icon-calendar"></i> 16 Mar 16:32</small>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!-- /.user-media -->
-
-    <!-- BEGIN MAIN NAVIGATION -->
-    <ul id="menu" class="unstyled accordion collapse in">
-
-        <li class="accordion-group active">
-                    <a data-parent="#menu" >
-                        <i class="icon-bug icon-large"></i> Browse Errors
-                    </a>
-                    <ul class="collapse in" id="dashboard-nav">
-                        <li><a href="{{{URL::to('tests/item/'.$test.'/all')}}}"><i class="icon-angle-right"></i> all </a></li>
-                        <li><a href="{{{URL::to('tests/item/'.$test.'/type')}}}"><i class="icon-angle-right"></i> by type </a></li>
-                        <li><a href="{{{URL::to('tests/item/'.$test.'/category')}}}"><i class="icon-angle-right"></i> by category </a></li>
-                        <li><a href="{{{URL::to('tests/item/'.$test.'/source')}}}"><i class="icon-angle-right"></i> by source </a></li>
-                        <li><a href="{{{URL::to('tests/item/'.$test.'/query')}}}"><i class="icon-angle-right"></i> by query </a></li>
-
-                    </ul>
-                </li>
-       </ul>
-    <!-- END MAIN NAVIGATION -->
+ @yield('left')
 
 </div>
 <!-- END LEFT -->
@@ -236,7 +204,7 @@
 
 <!-- BEGIN FOOTER -->
 <div id="footer">
-    <p>Powered by <a href="http://dbpedia.org">DBpedia</a></p>
+    <p>LadyBug <a href="http://dbpedia.org">DBpedia</a> Validation</p>
 </div>
 <!-- END FOOTER -->
 

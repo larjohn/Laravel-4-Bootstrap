@@ -1,373 +1,330 @@
-@extends('layouts.default')
+@extends('layouts.test')
 @section('content')
-<div id="loading"><i  class="icon-spinner icon-spin icon-large"></i> Loading content...</div>
-
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<div id="loading"><i class="icon-spinner icon-spin icon-large"></i> Loading content...</div>
 <style type="text/css">
 
 
+
+
+
+
+    #chart {
+        width: 960px;
+        height: 500px;
+        background: #bbb;
+    }
+
+    text {
+        pointer-events: none;
+    }
+
+    .grandparent text {
+        font-weight: bold;
+    }
+
     rect {
-        pointer-events: all;
+        fill: none;
+        stroke: #fff;
+    }
+
+    rect.parent,
+    .grandparent rect {
+        stroke-width: 2px;
+    }
+
+    .grandparent rect {
+        fill: orange;
+    }
+
+    .grandparent:hover rect {
+        fill: #ee9700;
+    }
+
+    .children rect.parent,
+    .grandparent rect {
         cursor: pointer;
     }
 
-    .chart {
-        display: block;
-        margin: auto;
-        margin-top: 40px;
+    rect.parent {
+        pointer-events: all;
     }
 
-    .label {
-        stroke: #000000;
-        fill: #000000;
-        stroke-width: 0;
-        padding: 2px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .children:hover rect.child {
+        fill: #aaa;
     }
 
-    .parent .label {
-        font-size: 12px;
-        stroke: #FFFFFF;
-        fill: #FFFFFF;
-    }
 
-    .child .label {
-        font-size: 11px;
-    }
-
-    .cell {
-        font-size: 11px;
-        cursor: pointer
-    }
-    #treemap{
-        width: 100%;
-    }
 </style>
 
-<div id="treemap"></div>
+
+<div class="row-fluid">
+    <div class="span6" id="treemap"></div>
+    <div class="span6">
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <th>Query</th>
+                <th>Errors</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Wrong Height</td>
+                    <td>43</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
 
 
 <script type="text/javascript">
-var chartWidth = $("#treemap").width();
-var chartHeight = "500";
-var xscale = d3.scale.linear().range([0, chartWidth]);
-var yscale = d3.scale.linear().range([0, chartHeight]);
-var color = d3.scale.category10();
-var headerHeight = 20;
-var headerColor = "#555555";
-var transitionDuration = 500;
-var root;
-var node;
+    var margin = {top: 20, right: 0, bottom: 0, left: 0},
+        width = 800,
+        height = 500 - margin.top - margin.bottom,
+        formatNumber = d3.format(",d"),
+        transitioning;
 
-var treemap = d3.layout.treemap()
-    .round(false)
-    .size([chartWidth, chartHeight])
-    .sticky(false)
-    .padding([headerHeight + 1, 1, 1, 1])
-    .value(function (d) {
-        return d.size;
-    });
+    var x = d3.scale.linear()
+        .domain([0, width])
+        .range([0, width]);
 
-var chart = d3.select("#treemap").append("div")
-    .append("svg:svg")
-    .attr("width", chartWidth)
-    .attr("height", chartHeight)
-    .append("svg:g");
-var margin = {top: 20, right: 0, bottom: 0, left: 0},
-    width = 620,
-    height = 500 - margin.top - margin.bottom,
-    transitioning;
-var grandparent = chart.append("g")
-    .attr("class", "grandparent");
+    var y = d3.scale.linear()
+        .domain([0, height])
+        .range([0, height]);
 
-grandparent.append("rect")
-    .attr("y", -margin.top)
-    .attr("width", width)
-    .attr("height", margin.top);
 
-grandparent.append("text")
-    .attr("x", 6)
-    .attr("y", 6 - margin.top)
-    .attr("dy", ".75em");
-var test_item = "{{EasyRdf_Namespace::expand($test)}}"
-d3.json(appRoot + "api/tests/categories?test="+test_item, function (data) {
+    var color = d3.scale.category10();
 
-    $("#loading").hide();
-    node = root = data;
-    var nodes = treemap.nodes(root);
 
-    var children = nodes.filter(function (d) {
-        return !d.children;
-    });
-    var parents = nodes.filter(function (d) {
-        return d.children;
-    });
-    grandparent
-        .datum(data.parent)
-        .on("click", zoom)
-        .select("text")
-    // create parent cells
-    var parentCells = chart.selectAll("g.cell.parent")
-        .data(parents, function (d) {
-            return "p-" + d.id;
-        });
-    var parentEnterTransition = parentCells.enter()
+    var treemap = d3.layout.treemap()
+        .children(function (d, depth) {
+            return depth ? null : d.children;
+        })
+        .sort(function (a, b) {
+            return a.value - b.value;
+        })
+        .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
+        .sticky(false)
+        .round(false);
+
+    var svg = d3.select("#treemap").append("svg")
+        .attr("width", "100%")
+        .attr("height", height + margin.bottom + margin.top)
+        .style("margin-left", -margin.left + "px")
+        .style("margin.right", -margin.right + "px")
+        .attr("preserveAspectRatio","xMinYMin meet")
+        .attr("viewBox","0 0 "+width +" "+height )
         .append("g")
-        .attr("class", "cell parent")
-        .on("click", function (d) {
-            zoom(d);
-        });
-    parentEnterTransition.append("rect")
-        .attr("width", function (d) {
-            return Math.max(0.01, d.dx - 1);
-        })
-        .attr("height", headerHeight)
-        .style("fill", headerColor);
-    parentEnterTransition.append('text')
-        .attr("class", "label")
-        .attr("transform", "translate(3, 13)")
-        .attr("width", function (d) {
-            return Math.max(0.01, d.dx - 1);
-        })
-        .attr("height", headerHeight)
-        .text(function (d) {
-            return d.name;
-        });
-    // update transition
-    var parentUpdateTransition = parentCells.transition().duration(transitionDuration);
-    parentUpdateTransition.select(".cell")
-        .attr("transform", function (d) {
-            return "translate(" + d.dx + "," + d.y + ")";
-        });
-    parentUpdateTransition.select("rect")
-        .attr("width", function (d) {
-            return Math.max(0.01, d.dx - 1);
-        })
-        .attr("height", headerHeight)
-        .style("fill", headerColor);
-    parentUpdateTransition.select(".label")
-        .attr("transform", "translate(3, 13)")
-        .attr("width", function (d) {
-            return Math.max(0.01, d.dx - 1);
-        })
-        .attr("height", headerHeight)
-        .text(function (d) {
-            return d.name;
-        });
-    // remove transition
-    parentCells.exit()
-        .remove();
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .style("shape-rendering", "crispEdges");
 
-    // create children cells
-    var childrenCells = chart.selectAll("g.cell.child")
-        .data(children, function (d) {
-            return "c-" + d.id;
-        });
-    // enter transition
-    var childEnterTransition = childrenCells.enter()
-        .append("g")
-        .attr("class", "cell child")
-        .on("click", function (d) {
-           // zoom(node === d.parent ? root : d.parent);
-            var id =d.id.split("~")[1];
-            d3.json(appRoot + "api/tests/categories?test="+test_item+"&category="+id, function(error, json) {
-                if (error) return console.warn(error);
-                data = json;
-                //treemap.nodes(data);
-                zoom(data);
+    var grandparent = svg.append("g")
+        .attr("class", "grandparent");
 
-            });
-        });
-    childEnterTransition.append("rect")
-        .classed("background", true)
-        .style("fill", function (d) {
-            return color(d.parent.name);
-        });
-    childEnterTransition.append('text')
-        .attr("class", "label")
-        .attr('x', function (d) {
-            return d.dx / 2;
-        })
-        .attr('y', function (d) {
-            return d.dy / 2;
-        })
-        .attr("dy", ".35em")
-        .attr("onclick", "javascript:alert('lol')")
+    grandparent.append("rect")
+        .attr("y", -margin.top)
+        .attr("width", width)
+        .attr("height", margin.top);
 
-        .attr("text-anchor", "middle")
-        .style("display", "none")
-        .text(function (d) {
-            return d.name;
-        });
-    /*
-     .style("opacity", function(d) {
-     d.w = this.getComputedTextLength();
-     return d.dx > d.w ? 1 : 0;
-     });*/
-    // update transition
-    var childUpdateTransition = childrenCells.transition().duration(transitionDuration);
-    childUpdateTransition.select(".cell")
-        .attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
-    childUpdateTransition.select("rect")
-        .attr("width", function (d) {
-            return Math.max(0.01, d.dx - 1);
-        })
-        .attr("height", function (d) {
-            return (d.dy - 1);
-        })
-        .style("fill", function (d) {
-            return color(d.parent.name);
-        });
-    childUpdateTransition.select(".label")
-        .attr('x', function (d) {
-            return d.dx / 2;
-        })
-        .attr('y', function (d) {
-            return d.dy / 2;
-        })
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        .style("display", "none")
-        .text(function (d) {
-            return d.name;
-        });
-    /*
-     .style("opacity", function(d) {
-     d.w = this.getComputedTextLength();
-     return d.dx > d.w ? 1 : 0;
-     });*/
-
-    // exit transition
-    childrenCells.exit()
-        .remove();
-
-    d3.select("select").on("change", function () {
-        console.log("select zoom(node)");
-        treemap.value(this.value == "size" ? size : count)
-            .nodes(root);
-        zoom(node);
-    });
-
-    zoom(node);
-});
+    grandparent.append("text")
+        .attr("x", 6)
+        .attr("y", 6 - margin.top)
+        .attr("dy", ".75em");
 
 
-function size(d) {
-    return d.size;
-}
+    loadTreemap(appRoot + "api/tests/categories?test=" + test_item);
+
+    function loadTreemap(url) {
 
 
-function count(d) {
-    return 1;
-}
+        d3.json(url, function(root) {
 
+            initialize(root);
+            accumulate(root);
+            layout(root);
+            display(root);
+            $("#loading").hide();
+            function initialize(root) {
+                root.x = root.y = 0;
+                root.dx = width;
+                root.dy = height;
+                root.depth = 0;
+            }
 
-//and another one
-function textHeight(d) {
-    var ky = chartHeight / d.dy;
-    yscale.domain([d.y, d.y + d.dy]);
-    return (ky * d.dy) / headerHeight;
-}
+            // Aggregate the values for internal nodes. This is normally done by the
+            // treemap layout, but not here because of our custom implementation.
+            function accumulate(d) {
+                return d.children
+                    ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
+                    : d.value;
+            }
 
-function getRGBComponents(color) {
-    var r = color.substring(1, 3);
-    var g = color.substring(3, 5);
-    var b = color.substring(5, 7);
-    return {
-        R: parseInt(r, 16),
-        G: parseInt(g, 16),
-        B: parseInt(b, 16)
-    };
-}
+            // Compute the treemap layout recursively such that each group of siblings
+            // uses the same size (1×1) rather than the dimensions of the parent cell.
+            // This optimizes the layout for the current zoom state. Note that a wrapper
+            // object is created for the parent node for each group of siblings so that
+            // the parent’s dimensions are not discarded as we recurse. Since each group
+            // of sibling was laid out in 1×1, we must rescale to fit using absolute
+            // coordinates. This lets us use a viewport to zoom.
+            function layout(d) {
+                if (d.children) {
+                    treemap.nodes({children: d.children});
+                    d.children.forEach(function(c) {
+                        c.x = d.x + c.x * d.dx;
+                        c.y = d.y + c.y * d.dy;
+                        c.dx *= d.dx;
+                        c.dy *= d.dy;
+                        c.parent = d;
+                        layout(c);
+                    });
+                }
+            }
 
+            function display(d) {
+                grandparent
+                    .datum(d.parent)
+                    .on("click", transition)
+                    .select("text")
+                    .text(name(d));
 
-function idealTextColor(bgColor) {
-    var nThreshold = 105;
-    var components = getRGBComponents(bgColor);
-    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
-    return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
-}
+                var g1 = svg.insert("g", ".grandparent")
+                    .datum(d)
+                    .attr("class", "depth");
 
+                var g = g1.selectAll("g")
+                    .data(d.children)
+                    .enter().append("g");
 
-function zoom(d) {
-    this.treemap
-        .padding([headerHeight / (chartHeight / d.dy), 0, 0, 0])
-        .nodes(d);
+                g.filter(function(d) { return d.children; })
+                    .classed("children", true)
+                    .on("click", transition);
 
-    // moving the next two lines above treemap layout messes up padding of zoom result
-    var kx = chartWidth / d.dx;
-    var ky = chartHeight / d.dy;
-    var level = d;
-
-    xscale.domain([d.x, d.x + d.dx]);
-    yscale.domain([d.y, d.y + d.dy]);
-
-    if (node != level) {
-        chart.selectAll(".cell.child .label").style("display", "none");
-    }
-
-    var zoomTransition = chart.selectAll("g.cell").transition().duration(transitionDuration)
-        .attr("transform", function (d) {
-            return "translate(" + xscale(d.x) + "," + yscale(d.y) + ")";
-        })
-        .each("start", function () {
-            d3.select(this).select("label")
-                .style("display", "none");
-        })
-        .each("end", function (d, i) {
-            if (!i && (level !== self.root)) {
-                chart.selectAll(".cell.child")
-                    .filter(function (d) {
-                        return d.parent === self.node; // only get the children for selected group
+                g.selectAll(".child")
+                    .data(function(d) { return d.children || [d]; })
+                    .enter().append("rect")
+                    .attr("class", "child")
+                    .classed("background", true)
+                    .style("fill", function (d) {
+                        return color(d.parent.name);
                     })
-                    .select(".label")
-                    .style("display", "")
+                    .call(rect);
+
+                g.append("rect")
+                    .attr("class", "parent")
+                    .call(rect)
+                    .append("title")
+                    .text(function(d) { return formatNumber(d.value); })
                     .style("fill", function (d) {
                         return idealTextColor(color(d.parent.name));
                     });
+
+                g.append("text")
+                    .attr("dy", ".75em")
+                    .text(function(d) { return d.name; })
+                    .call(text);
+
+                function transition(d2) {
+                    if (transitioning || !d2) return;
+                    $("#loading").show();
+                    var uri ="";
+                    if(d2.id=="0"){
+
+                         uri = appRoot + "api/tests/categories?test=" + test_item;
+                    }
+                    else{
+                        uri = appRoot + "api/tests/categories?test="+test_item+"&category="+d2.id;//  d.id.split("~")[1];
+                    }
+                    d3.json(uri, function(error, d)
+                    {
+                        initialize(d);
+                        accumulate(d);
+                        layout(d);
+                        $("#loading").hide();
+                        transitioning = true;
+                        d.parent= d2.parent;
+                        var g2 = display(d),
+                            t1 = g1.transition().duration(0),
+                           t2 = g2.transition().duration(0);
+
+                        // Update the domain only after entering new elements.
+                        x.domain([d.x, d.x + d.dx]);
+                        y.domain([d.y, d.y + d.dy]);
+
+                        // Enable anti-aliasing during the transition.
+                        svg.style("shape-rendering", null);
+
+                        // Draw child nodes on top of parent nodes.
+                        svg.selectAll(".depth").sort(function(a, b) { return a.depth - b.depth; });
+
+                        // Fade-in entering text.
+                        g2.selectAll("text").style("fill-opacity", 0);
+
+                        // Transition to the new view.
+                        t1.selectAll("text").call(text).style("fill-opacity", 0);
+                        t2.selectAll("text").call(text).style("fill-opacity", 1);
+                        t1.selectAll("rect").call(rect);
+                        t2.selectAll("rect").call(rect);
+
+                        // Remove the old node when the transition is finished.
+                        t1.remove().each("end", function() {
+                            svg.style("shape-rendering", "crispEdges");
+                            transitioning = false;
+                        });
+                    });
+
+
+                }
+
+                return g;
+            }
+
+            function text(text) {
+                text.attr("x", function(d) { return x(d.x) + 6; })
+                    .attr("y", function(d) { return y(d.y) + 6; });
+            }
+
+            function rect(rect) {
+                rect.attr("x", function(d) { return x(d.x); })
+                    .attr("y", function(d) { return y(d.y); })
+                    .attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
+                    .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); });
+            }
+
+
+            function getRGBComponents(color) {
+                var r = color.substring(1, 3);
+                var g = color.substring(3, 5);
+                var b = color.substring(5, 7);
+                return {
+                    R: parseInt(r, 16),
+                    G: parseInt(g, 16),
+                    B: parseInt(b, 16)
+                };
+            }
+
+
+            function idealTextColor(bgColor) {
+                var nThreshold = 105;
+                var components = getRGBComponents(bgColor);
+                var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+                return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
+            }
+
+            function name(d) {
+
+                return d.name;
+                return d.parent
+                    ? name(d.parent) + "." + d.name
+                    : d.name;
             }
         });
 
-    zoomTransition.select(".label")
-        .attr("width", function (d) {
-            return Math.max(0.01, (kx * d.dx - 1));
-        })
-        .attr("height", function (d) {
-            return d.children ? headerHeight : Math.max(0.01, (ky * d.dy - 1));
-        })
-        .text(function (d) {
-            return d.name;
-        });
 
-    zoomTransition.select(".child .label")
-        .attr("x", function (d) {
-            return kx * d.dx / 2;
-        })
-        .attr("y", function (d) {
-            return ky * d.dy / 2;
-        });
-
-    // update the width/height of the rects
-    zoomTransition.select("rect")
-        .attr("width", function (d) {
-            return Math.max(0.01, (kx * d.dx - 1));
-        })
-        .attr("height", function (d) {
-            return d.children ? headerHeight : Math.max(0.01, (ky * d.dy - 1));
-        })
-        .style("fill", function (d) {
-            return d.children ? headerColor : color(d.parent.name);
-        });
-
-    node = d;
-
-    if (d3.event) {
-        d3.event.stopPropagation();
     }
-}
 </script>
 
 
