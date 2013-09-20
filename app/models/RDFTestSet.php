@@ -265,9 +265,9 @@ class RDFTestSet extends SPARQLModel {
 
         $sparql->select($this->test);
         $sparql->distinct(true);
-        $sparql->variable("?err" );
         $sparql->variable("?type" );
         $sparql->variable("?source" );
+        $sparql->variable("?class" );
         $sparql->variable("?query" );
         $sparql->variable("?res" );
         $sparql->where("?err", "a", "<http://spinrdf.org/spin#ConstraintViolation>" );
@@ -295,7 +295,7 @@ class RDFTestSet extends SPARQLModel {
 
         }
         if(isset($resource)){
-            $sparql->where("?err", "<http://spinrdf.org/spin#violationRoot>","<?res>");
+            $sparql->where("?err", "<http://spinrdf.org/spin#violationRoot>","<$resource>");
 
         }
 
@@ -303,20 +303,29 @@ class RDFTestSet extends SPARQLModel {
 
 
         $sparql->orderBy("count(?err)");
-
+        $sparql->limit(50);
 
         //var_dump($sparql->getQuery());
 
         $data  = $sparql->launch();
 
 
-        var_dump($data);
+
 
 
         $results = array();
 
         foreach ($data["results"]["bindings"] as $result) {
-            $results[] = array("value"=>$result["type"]["value"], "label"=>EasyRdf_Namespace::shorten($result["type"]["value"]));
+            $results[] = array(
+
+                "type"=>$result["type"]["value"],
+                "source"=>$result["source"]["value"],
+                "resource"=>$result["res"]["value"],
+                "query"=>$result["query"]["value"],
+                "classification"=>$result["class"]["value"],
+
+
+            );
         }
 
 

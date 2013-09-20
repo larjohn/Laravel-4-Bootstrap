@@ -17,8 +17,13 @@ class RDFErrorController extends BaseController
     public function getFacets(){
 
         $test = Input::get('test', null);
+        $filters = Input::get('filters', array());
+        $sizes = Input::get('sizes', array());
+
         $collection = new RDFErrorCollection();
-        $facets = $collection->getFacets($test);
+        $collection->setFilters($filters);
+
+        $facets = $collection->getFacets($test,"", $sizes);
         return Response::json($facets);
 
     }
@@ -100,7 +105,7 @@ class RDFErrorController extends BaseController
         if(isset($test)&&$test!="")
             $filters["test"] = array("name"=>"test", "operator"=>"=","value"=>EasyRdf_Namespace::expand($test));
         $collection->setFilters($filters);
-        return Response::json($collection->getFacets("query"));
+        return Response::json($collection->getFacets($test,"query"));
     }
 
 

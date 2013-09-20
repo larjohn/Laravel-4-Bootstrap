@@ -19,7 +19,12 @@ class RDFTestController extends BaseController
 
         $test = Input::get('test', null);
         $category = Input::get('category', null);
-        return Response::json(RDFSubject::getCategories($test,$category));
+        if(isset($category))
+            $categoryQueries = RDFSubject::getQueriesByCategory($test,$category);
+        else $categoryQueries = null;
+
+        $categories = RDFSubject::getCategories($test,$category);
+        return Response::json(array("categories"=>$categories, "queries"=>$categoryQueries));
     }
 
     public function getClassification(){

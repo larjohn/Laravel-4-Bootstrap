@@ -91,13 +91,21 @@
 
                 g.append("path")
                     .attr("d", arc)
+                    .attr("title", function(d) {
+
+                        return (d.data.class);
+
+                    })
                     .style("fill", function(d) {
 
                         return color(d.data.class);
 
+                    })
+                    .append("title").text(function(d) {
+                        return prefix(d.data.class) + " ("+ d.data.count +" errors)";
                     });
 
-                g.append("text")
+           /*     g.append("text")
                     .attr("transform", function(d) {
                         return "translate(" + arc.centroid(d) + ")";
                     })
@@ -106,7 +114,7 @@
                     .text(function(d) {
                         return d.data.count;
                     });
-
+*/
             });
 
 

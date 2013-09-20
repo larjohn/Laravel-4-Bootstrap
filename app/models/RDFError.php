@@ -87,8 +87,10 @@ class RDFError extends RDFModel {
         $sparql->variable("?".$name);
         $sparql->where("<".$this->violationRoot[0]->identifier.">","<".$path.">","?".$name);
 
+        //var_dump($sparql->getQuery());die;
         $data = $sparql->launch();
 
+       // var_dump($data);
         if(!isset($this->value[$name]))
             $this->value[$name]= array();
 

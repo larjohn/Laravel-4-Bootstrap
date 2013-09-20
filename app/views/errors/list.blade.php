@@ -3,7 +3,6 @@
 
 <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 
-<script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
 
 <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
@@ -12,41 +11,10 @@
 <script type="text/javascript" charset="utf-8">
     var mode = "{{$mode}}";
     error_filters = {};
+    facet_sizes = {};
     @if (isset($mode) && $mode == "item" )
     var test_item = "{{$test}}"
     @endif
-
-    $(document).ready(function () {
-
-        // TO CREATE AN INSTANCE
-        // select the tree container using jQuery
-        $("#significance-tree")
-            // call `.jstree` with the options object
-            .jstree({
-                // the `plugins` array allows you to configure the active plugins on this instance
-                "plugins": ["themes", "html_data", "ui", 'checkbox', "crrm"]
-
-                // it makes sense to configure a plugin only if overriding the defaults
-            })
-            // EVENTS
-            // each instance triggers its own events - to process those listen on the container
-            // all events are in the `.jstree` namespace
-            // so listen for `function_name`.`jstree` - you can function names from the docs
-            .bind("loaded.jstree", function (event, data) {
-                // you get two params - event & data - check the core docs for a detailed description
-            });
-
-        $("#significance-tree").bind("change_state.jstree", function (event, data) {
-
-            var tree = jQuery.jstree._reference($("#significance-tree"));
-            var checked = tree.get_checked(undefined, true);
-            error_filters.significance = [];
-            for (var i = 0; i < checked.length; i++) {
-
-                error_filters.significance.push($(checked[i]).attr("id"));
-            }
-        });
-    });
 
 
 </script>
@@ -76,6 +44,12 @@
         <h3 id="myModalLabel">Error Details</h3>
     </div>
     <div class="modal-body">
+    <div class="row-fluid">
+        <div class="span4">
+        <dl>
+            <dd>Query:</dd>
+            <dt>@%:query[0].id%@</dt>
+        </dl>
         <dl>
             <dd>Resource:</dd>
             <dt>@%curie:violationRoot[0].id%@</dt>
@@ -86,8 +60,18 @@
         </dl>
         <dl class="alert alert-error">
             <dd>Value (@%curie:value.offender[0].path%@):</dd>
-            <dt>@%:value.offender[0].value%@</dt>
+            <dt>
+            <ul>
+             @%for value.offender%@
+                    <li>@%:value%@</li>
+             @%/for%@
+            </ul>
+
         </dl>
+        </div>
+         <div class="span4">
+
+        @%if value.context %@
         <dl class="alert alert-warning">
             <dd>Context</dd>
             <dt>
@@ -97,13 +81,11 @@
                     <li>@%curie:path%@: @%curie:value%@</li>
                 @%/for%@
                 </ul>
-
+        @%/if%@
 
         </dl>
-        <dl>
-            <dd>Query:</dd>
-            <dt>@%:query[0].id%@</dt>
-        </dl>
+
+         @%if violationRoot[0].category[0]% %@
         <dl>
             <dd>Categories:</dd>
             <dt>
@@ -115,9 +97,11 @@
 
             </dt>
         </dl>
-<div class="form-actions">
-    <button class="btn btn-success">Add subject</button>
-</div>
+        @%/if%@
+
+    </div>
+    </div>
+
 
     </div>
     <div class="modal-footer">
@@ -146,18 +130,18 @@
         <script id="facetTmpl" type="text/x-jsrender">
 
                 @%for facets%@
-                <div class="row-fluid facet @%:state%@">
+                <div class="row-fluid facet @%:state%@" data-facet="@%:title%@">
                     <h4><a class="revert" data-facet="@%:title%@"><i class="icon-undo"></i></a> @%:title%@ </h4>
 
                     <div class="span12">
                         @%for elements%@
                         <div class="row-fluid facet-item @%:state%@">
                             <a data-facet="@%:#parent.parent.data.title%@" data-facet-value="@%:value%@">@%curie:label%@</a>
-                            <span class="badge badge-info">@%:count%@</span>
+                            <span class="badge badge-success">@%:count%@</span>
                         </div>
                         @%/for%@
                         <div>
-                            <span>More...</span>
+                            <a class="more-loader label label-info">more...</a>
                         </div>
                     </div>
                 </div>

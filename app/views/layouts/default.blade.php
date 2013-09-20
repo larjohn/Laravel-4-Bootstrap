@@ -51,6 +51,8 @@
     <script type="text/javascript" src="{{{ asset('assets/js/application/main.js') }}}"></script>
     <script src="{{{ asset('assets/js/VIE/vie-2.1.0.debug.js') }}}" type="text/javascript"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/application/rdf.js') }}}"></script>
+    <script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
+    <script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
     <script type="text/javascript" src="{{{ asset('assets/js/application/ladybug.js') }}}"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -87,7 +89,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="{{URL::to('')}}"></a>
+                <a class="brand" href="{{URL::to('')}}"><img src="{{{ asset('assets/img/ladybug.png') }}}"/></a>
                 <!-- .topnav -->
                 <div class="btn-toolbar topnav">
                     <div class="btn-group">
@@ -125,10 +127,11 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-                    <h3><i class="icon-home"></i>
+                    <span>
+                   <i class="icon-home"></i>
 
                         {{ Breadcrumbs::render($bread["path"], $bread["params"]) }}
-                    </h3>
+                    </span>
                 </div>
             </div>
             <!-- /.row-fluid -->

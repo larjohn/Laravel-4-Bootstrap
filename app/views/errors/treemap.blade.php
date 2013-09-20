@@ -1,5 +1,6 @@
 @extends('layouts.test')
 @section('content')
+
 <div id="loading"><i class="icon-spinner icon-spin icon-large"></i> Loading content...</div>
 <style type="text/css">
 
@@ -25,6 +26,7 @@
     rect {
         fill: none;
         stroke: #fff;
+        stroke-width: 3px;
     }
 
     rect.parent,
@@ -66,11 +68,8 @@
                 <th>Query</th>
                 <th>Errors</th>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Wrong Height</td>
-                    <td>43</td>
-                </tr>
+            <tbody id="queries">
+
             </tbody>
         </table>
 
@@ -79,9 +78,34 @@
 </div>
 
 
+<script id="queriesTmpl" type="text/x-jsrender">
+                @%for queries%@
+                <tr>
+                    <td>@%curie:query%@</td>
+                    <td>@%:count%@</td>
+                </tr>
+                @%/for%@
+</script>
+<div class="span3 text-right" id="facets">
 
 
 <script type="text/javascript">
+$.views.settings.delimiters("@%", "%@");
+function setQueries(data){
+    var queries = [];
+    $.each(data, function () {
+        queries.push(this);
+
+    });
+    var app = {
+        queries: queries
+    };
+    var queriesTemplate = $.templates("#queriesTmpl");
+
+    queriesTemplate.link("#queries", app);
+
+
+}
     var margin = {top: 20, right: 0, bottom: 0, left: 0},
         width = 800,
         height = 500 - margin.top - margin.bottom,
@@ -143,10 +167,10 @@
 
         d3.json(url, function(root) {
 
-            initialize(root);
-            accumulate(root);
-            layout(root);
-            display(root);
+            initialize(root.categories);
+            accumulate(root.categories);
+            layout(root.categories);
+            display(root.categories);
             $("#loading").hide();
             function initialize(root) {
                 root.x = root.y = 0;
@@ -238,8 +262,10 @@
                     else{
                         uri = appRoot + "api/tests/categories?test="+test_item+"&category="+d2.id;//  d.id.split("~")[1];
                     }
-                    d3.json(uri, function(error, d)
+                    d3.json(uri, function(error, data)
                     {
+                        setQueries(data.queries);
+                        var d = data.categories;
                         initialize(d);
                         accumulate(d);
                         layout(d);

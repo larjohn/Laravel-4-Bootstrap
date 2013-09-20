@@ -17,3 +17,14 @@ function unprefix(curie){
         return curie;
     }
 }
+
+
+$.views.converters("curie", function (val) {
+    var decoded = decodeURIComponent(val);
+    try {
+        return VIE.Util.toCurie("<" + decoded + ">", false, namespaces);
+    }
+    catch (err) {
+        return val;
+    }
+});

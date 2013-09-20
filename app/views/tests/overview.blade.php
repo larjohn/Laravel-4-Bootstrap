@@ -2,7 +2,10 @@
 @section('content')
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/backbone_extensions.js') }}}"></script>
 <script type="text/javascript" src="{{{ asset('assets/js/visualsearch/utils/jquery_extensions.js') }}}"></script>
+<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 
+
+<script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
 
 <script src="{{{ asset('assets/js/visualsearch/visualsearch.js') }}}" type="text/javascript"></script>
 
@@ -34,25 +37,43 @@
         <h2>Search Errors</h2>
         <div id="search_box_container"></div>
         <div id="search_query">&nbsp;</div>
+        <div id="results"></div>
     </div>
 
+    <script id="resultsTmpl" type="text/x-jsrender">
 
+                @%for results%@
+                <div class="row-fluid result">
+                    <h4> @%:resource%@ </h4>
+                    <div> @%:query%@ </div>
+                    <div> @%:type%@ </div>
+                    <div> @%:classification%@ </div>
+                    <div> @%:source%@ </div>
+
+                </div>
+                @%/for%@
+            </script>
     <script type="text/javascript" charset="utf-8">
+        $.views.settings.delimiters("@%", "%@");
+        function setSearchResults(data){
+            var results = [];
+            $.each(data, function () {
+                results.push(this);
+
+            });
+            var app = {
+                results: results
+            };
+            var resultsTemplate = $.templates("#resultsTmpl");
+
+            resultsTemplate.link("#results", app);
+
+
+        }
+
         $(document).ready(function () {
 
-            jQuery.getJSON("ajax/test.json", function( data ) {
-                    var items = [];
-                    $.each( data, function( key, val ) {
-                        items.push( "<li id='" + key + "'>" + val + "</li>" );
-                    });
 
-                    $( "<ul/>", {
-                        "class": "my-new-list",
-                        html: items.join( "" )
-                    }).appendTo( "body" );
-                }
-
-            );
 
 
             window.visualSearch = VS.init({
@@ -80,9 +101,15 @@
                             });
                         }, 2000);
 
-                        
-                        jQuery.getJSON(appRoot+"api/tests/errors", {test:test_item, resource:searchCollection.Resource,type:searchCollection.Type,class:searchCollection.Classification,source:searchCollection.Source,query:searchCollection.Query}, function( data ) {
-                                callback(data);
+                        var search = {};
+                        var ft = searchCollection.facets();
+                        ft.forEach(function(element){
+                            search = jQuery.extend(search, element);
+                        });
+
+                        jQuery.getJSON(appRoot+"api/tests/errors", {test:test_item, resource:search.Resource,type:search.Type,class:search.Classification,source:search.Source,query:search.Query}, function( data ) {
+
+                                setSearchResults(data);
                             }
 
                         );

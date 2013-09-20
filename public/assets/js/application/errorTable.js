@@ -21,7 +21,7 @@ function setFacets(data){
 
 
 function fillData() {
-    $.getJSON(appRoot + 'api/error/facets', error_filters, function (data) {
+    $.getJSON(appRoot + 'api/error/facets', {filters: error_filters, sizes:facet_sizes, test:unprefix(test_item)}, function (data) {
        setFacets(data);
     });
 
@@ -136,15 +136,6 @@ $(document).ready(function () {
 
 
 
-    $.views.converters("curie", function (val) {
-        var decoded = decodeURIComponent(val);
-        try {
-            return VIE.Util.toCurie("<" + decoded + ">", false, namespaces);
-        }
-        catch (err) {
-            return val;
-        }
-    });
 
 
 
@@ -166,12 +157,27 @@ $(document).ready(function () {
             test: unprefix(test_item)
         };
 
+        $("#errorModal").css('width', '500px');
         $("#errorModal").modal({}).toggleClass('loading', true);
         $.getJSON(appRoot + 'api/error/item', params, function (data) {
             errorsTemplate.link("#item-modal-content", data);
             $("#errorModal").toggleClass('loading', false);
 
 
+        });
+
+
+    });
+
+    $(document).on("click", ".more-loader", function(event){
+        var facet = $(event.target).parents(".facet").attr("data-facet");
+
+        if(facet_sizes[facet]==undefined)
+            facet_sizes[facet] = 16;
+        else facet_sizes[facet] *= 2;
+
+        $.getJSON(appRoot + 'api/error/facets', {filters: error_filters, sizes:facet_sizes, test:unprefix(test_item)}, function (data) {
+            setFacets(data);
         });
 
 

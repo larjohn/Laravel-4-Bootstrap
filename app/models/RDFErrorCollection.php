@@ -62,7 +62,7 @@ class RDFErrorCollection
      * @param string $variable select a single facet giving its path
      * @return array
      */
-    public function getFacets($test, $variable = "", $limit = 8)
+    public function getFacets($test, $variable = "", $limits = array())
     {
 
 
@@ -112,13 +112,18 @@ class RDFErrorCollection
                 $sparql->variable("?" . $facet[$i - 1]);
             }
 
-            if ($limit > 0) {
+            if (isset($limits[$title])) {
+
+                $sparql->limit($limits[$title]);
+            }
+            else{
+                $sparql->limit(8);
             }
 
             $this->applyFilters($sparql);
             $sparql->orderBy("?count", "desc");
             $sparql->bound(false);
-            $sparql->limit($limit);
+
             //var_dump($sparql->getQuery());//die;
             $data = $sparql->launch();
            // continue;
