@@ -15,7 +15,6 @@ class RDFError extends RDFModel {
 
 
 
-    protected static $baseURI       = "nodeID://";
     protected static $type          = "http://spinrdf.org/spin#ConstraintViolation";
     protected static $mapping       = [
         'http://purl.org/dc/terms/#submitted' => 'submitted',
@@ -64,13 +63,6 @@ class RDFError extends RDFModel {
 
     public $value;
     protected static $status        = false;
-
-    public function generateID()
-    {
-    //    if(!isset($this->hash) || !is_string($this->hash) || $this->hash == '') throw new Exception("There is no hash string to generate the unique URI");
-
-        return self::$baseURI . $this->hash;
-    }
 
 
 

@@ -1,16 +1,15 @@
 @extends('layouts.test')
 @section('content')
 
-<script type="text/javascript" src="{{{ asset('assets/js/jsviews/jsviews.js') }}}"></script>
 
 
-<script src="{{{ asset('assets/js/jqGrid/jquery.jqGrid.src.js') }}}" type="text/javascript"></script>
+
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
 
 
 <script type="text/javascript" charset="utf-8">
     var mode = "{{$mode}}";
-    error_filters = {};
+    error_filters = eval({{$filters}});
     facet_sizes = {};
     @if (isset($mode) && $mode == "item" )
     var test_item = "{{$test}}"
@@ -19,11 +18,14 @@
 
 </script>
 <script type="text/javascript" src="{{{ asset('assets/js/application/errorTable.js') }}}"></script>
-<script src="{{{ asset('assets/js/jstree/jquery.jstree.js') }}}" type="text/javascript"></script>
 <link href="{{{ asset('assets/css/jstree/themes/default/style.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 <link href="{{{ asset('assets/css/ui.jqgrid.css') }}}" media="screen" rel="stylesheet" type="text/css"/>
 
+<script id="permalinkTmpl" type="text/x-jsrender">
+    <span><i class="icon-link"></i>
+    <a data-link="href%:permalink%">permalink</a>
 
+</script>
 
 <!-- Modal -->
 <div id="errorModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -106,7 +108,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        <button class="btn btn-primary">Save changes</button>
+
     </div>
 
 </script>
@@ -115,7 +117,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <h1 class="page-header">{{{$title}}}</h1>
-        <h3 id="test_name"></h3>
+
+        <div class="pull-right" id="permalink"></div>
     </div>
     <div class="row-fluid">
 
@@ -140,9 +143,11 @@
                             <span class="badge badge-success">@%:count%@</span>
                         </div>
                         @%/for%@
+                        @%if total>requested%@
                         <div>
                             <a class="more-loader label label-info">more...</a>
                         </div>
+                        @%/if%@
                     </div>
                 </div>
                 @%/for%@

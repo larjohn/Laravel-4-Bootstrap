@@ -10,7 +10,7 @@
 
 
     #chart {
-        width: 960px;
+        width: 100%;
         height: 500px;
         background: #bbb;
     }
@@ -58,24 +58,27 @@
 
 </style>
 
+<div class="container-fluid">
+    <div class="row-fluid">
+        <h1 class="page-header">{{{$title}}}</h1>
+        <div class="span12" id="treemap"></div>
+        <div class="span12">
 
-<div class="row-fluid">
-    <div class="span6" id="treemap"></div>
-    <div class="span6">
-
-        <table class="table table-bordered table-striped">
-            <thead>
+            <table class="table table-bordered table-striped">
+                <thead>
                 <th>Query</th>
                 <th>Errors</th>
-            </thead>
-            <tbody id="queries">
+                </thead>
+                <tbody id="queries">
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+
+        </div>
 
     </div>
-
 </div>
+
 
 
 <script id="queriesTmpl" type="text/x-jsrender">

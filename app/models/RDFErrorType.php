@@ -7,6 +7,7 @@
 
  */
 use Legrand\SPARQLModel;
+use Legrand\SPARQL;
 use Base\RDFModel;
 class RDFErrorType  extends RDFModel {
 
@@ -18,14 +19,34 @@ class RDFErrorType  extends RDFModel {
 
     ];
 
-    protected static $multiMapping  = [
 
-        "http://purl.org/dc/terms/subject" => [
-            'property' => 'category',
-            'mapping' => 'RDFSubject', //should be the name of the corresponding class
-            'inverse' => false,
-        ],
-    ];
-}
+    public static function getTypes($test){
+        $sparql = new SPARQL();
+        $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
+
+
+        $sparql->select($test);
+        $sparql->variable("?type");
+        $sparql->variable("count (?err) as ?count");
+        $sparql->where("?err", "<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorType>", "?type");
+
+        $data = $sparql->launch();
+
+        $results = array("name"=>"errorType", "children"=>array());
+        foreach ($data["results"]["bindings"] as $result) {
+
+            $results["children"][] = array("name"=>$result["type"]["value"], "size"=>$result["count"]["value"]);
+
+        }
+
+
+        return $results;
+
+
+    }
+
+
+
+    }
 
 RDFErrorType::init();

@@ -10,6 +10,33 @@ use Legrand\SPARQLModel;
 use Legrand\SPARQL;
 class RDFTestSet extends SPARQLModel {
 
+
+
+    protected static $type          = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#Test";
+
+
+    public static  function getConfig($setting){
+        switch($setting){
+
+            case 'sparqlmodel.graph':{
+                return 'http://debug.dbpedia.org/tests';
+            }
+            default:{
+            return Config::get($setting);
+            }
+        }
+
+    }
+
+    protected static $mapping       = [
+        'http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#start' => 'start',
+        'http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#end' => 'end',
+        'http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorsCount' => 'errorsCount',
+
+    ];
+
+
+
     public $test;
 
     public function  __constructor($test){
@@ -62,6 +89,34 @@ class RDFTestSet extends SPARQLModel {
 
     }
 
+    public static function getLatest(){
+        $sparql = new SPARQL();
+        $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
+
+        $sparql->select(self::getConfig('sparqlmodel.graph'));
+        $sparql->distinct(true);
+
+        $sparql->variable("?test" );
+         $sparql->where("?test", "a", "<".self::$type.">" );
+        $sparql->where("?test", "<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#start>","?start");
+        $sparql->orderBy("?start","desc");
+        $sparql->limit(1);
+
+
+
+        //var_dump($sparql->getQuery());
+
+        $data  = $sparql->launch();
+
+
+        //var_dump($data);
+
+
+
+       return $data["results"]["bindings"]["0"]["test"]["value"];
+
+
+    }
 
     public function getResources($search=null){
         $sparql = new SPARQL();
@@ -141,7 +196,9 @@ class RDFTestSet extends SPARQLModel {
 
 
 
-    }   public function getQueries($search=null){
+    }
+
+    public function getQueries($search=null){
         $sparql = new SPARQL();
         $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
 
@@ -179,7 +236,9 @@ class RDFTestSet extends SPARQLModel {
 
 
 
-    }   public function getSources($search=null){
+    }
+
+    public function getSources($search=null){
         $sparql = new SPARQL();
         $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
 
@@ -338,6 +397,46 @@ class RDFTestSet extends SPARQLModel {
     }
 
 
+    public static function getTests(){
+        $sparql = new SPARQL();
+        $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
+
+        $sparql->select(self::getConfig('sparqlmodel.graph'));
+        $sparql->distinct(true);
+
+        $sparql->variable("?test" );
+        $sparql->variable("?start" );
+        $sparql->variable("?errorsCount" );
+        $sparql->where("?test", "a", "<".self::$type.">" );
+        $sparql->where("?test", "<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#start>","?start");
+        $sparql->where("?test", "<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorsCount>","?errorsCount");
+
+
+
+        //var_dump($sparql->getQuery());
+
+        $data  = $sparql->launch();
+
+
+        //var_dump($data);
+
+
+        $results = array();
+
+        foreach ($data["results"]["bindings"] as $result) {
+
+
+            $results[] = array(
+                "test"=>$result["test"]["value"],
+                "errorsCount"=>$result["errorsCount"]["value"],
+                "start"=>$result["start"]["value"],
+            );
+
+        }
+
+
+        return $results;
+    }
 
 
 }

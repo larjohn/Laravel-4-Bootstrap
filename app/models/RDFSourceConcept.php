@@ -7,6 +7,7 @@
 
  */
 use Legrand\SPARQLModel;
+use Legrand\SPARQL;
 use Base\RDFModel;
 class RDFSourceConcept  extends RDFModel {
 
@@ -24,6 +25,31 @@ class RDFSourceConcept  extends RDFModel {
             'inverse' => false,
         ],
     ];
+
+    public static function getSources($test){
+        $sparql = new SPARQL();
+        $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');
+
+
+        $sparql->select($test);
+        $sparql->variable("?source");
+        $sparql->variable("count (?err) as ?count");
+        $sparql->where("?err", "<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/ecn#errorSource>", "?source");
+
+        $data = $sparql->launch();
+
+        $results = array("name"=>"errorSource", "children"=>array());
+        foreach ($data["results"]["bindings"] as $result) {
+
+            $results["children"][] = array("name"=>$result["source"]["value"], "size"=>$result["count"]["value"]);
+
+        }
+
+
+        return $results;
+
+
+    }
 }
 
 RDFSourceConcept::init();

@@ -1,13 +1,12 @@
 var vie = new VIE();
 var namespaces = new vie.Namespaces(
-    "http://debug.dbpedia.org/",
+    "http://debug.dbpedia.org/ns",
     {
 
         "dbo": "http://dbpedia.org/ontology/",
         "dbc": "http://dbpedia.org/resource/Category:",
         "dbr": "http://dbpedia.org/resource/",
         "dbp": "http://dbpedia.org/property/",
-
         "dbt": "http://debug.dbpedia.org/tests/",
         "dcterms": "http://purl.org/dc/terms/",
         "spinrdf": "http://spinrdf.org/spin#",

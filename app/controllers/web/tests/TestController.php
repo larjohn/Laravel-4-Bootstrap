@@ -28,4 +28,13 @@ class TestController extends BaseController {
     }
 
 
+    public function  showTestList(){
+        return View::make('tests/list')
+            ->with('title',"Tests Index")
+            ->with('bread', array("path"=>"tests","params"=>array()))
+            ;
+
+    }
+
+
 }

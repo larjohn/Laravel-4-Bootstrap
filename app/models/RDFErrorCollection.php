@@ -112,14 +112,16 @@ class RDFErrorCollection
                 $sparql->variable("?" . $facet[$i - 1]);
             }
 
+
             if (isset($limits[$title])) {
 
-                $sparql->limit($limits[$title]);
+                $limit = $limits[$title];
+
             }
             else{
-                $sparql->limit(8);
+                $limit = 8;
             }
-
+            $sparql->limit($limit);
             $this->applyFilters($sparql);
             $sparql->orderBy("?count", "desc");
             $sparql->bound(false);
@@ -129,9 +131,20 @@ class RDFErrorCollection
            // continue;
 
 
+            $sparql->variables = array();
+            $sparql->variable("count (distinct ?" . $var. ") as ?facetValues");
+            $sparql->sparql="";
+            $facetValuesData = $sparql->launch();
+            //var_dump($facetValuesData);die;
+            if(isset( $facetValuesData["results"]["bindings"][0]))
+                $facetValues = $facetValuesData["results"]["bindings"][0]["facetValues"]["value"];
+            else $facetValues = 0;
+
+
             $facetArray = array();
             $facetArray["title"] = $title;
-
+            $facetArray["total"] = $facetValues;
+            $facetArray["requested"] = $limit;
             //var_dump($this->currentFilters);
             if(isset($this->currentFilters[$title])){
                 $facetArray["state"] = "active";

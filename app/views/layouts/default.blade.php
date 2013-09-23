@@ -104,9 +104,9 @@
                 <div class="nav-collapse collapse">
                     <!-- .nav -->
                     <ul class="nav">
-                        <li class="active"><a href="/">Test Dashboard</a></li>
-                        <li><a href="table.html">Queries</a></li>
-                        <li><a href="file.html">Tests</a></li>
+                        <li class="active"><a href="{{URL::to('/tests/latest')}}">Test Dashboard</a></li>
+                        <li><a href="{{URL::to('queries')}}">Queries</a></li>
+                        <li><a href="{{URL::to('tests')}}">Tests</a></li>
 
                     </ul>
                     <!-- /.nav -->

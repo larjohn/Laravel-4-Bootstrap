@@ -1,5 +1,11 @@
-$.views.settings.delimiters("@%", "%@");
+$.views.settings.delimiters("@%", "%@","/");
 var data_page = {};
+permalink = {};
+
+function setPermalink(){
+
+    $.observable(permalink).setProperty("permalink", appRoot+ "tests/item/"+ prefix(test_item) +"/all?"+ jQuery.param({filters:error_filters})) ;
+}
 
 function setFacets(data){
     var facets = [];
@@ -13,9 +19,10 @@ function setFacets(data){
     var facetsTemplate = $.templates("#facetTmpl");
 
     facetsTemplate.link("#facets", app);
-
+    setPermalink();
 
 }
+
 
 
 
@@ -117,6 +124,17 @@ function loadError(resource, property, query, test) {
 
 $(document).ready(function () {
 
+    $(document).keydown(function(event) {
+        if(event.which==27){
+            error_filters = {};
+            $("#list").setGridParam({postData: null});
+            $('#list').setGridParam({ postData: {filters: error_filters, test:unprefix(test_item)}  }).trigger('reloadGrid');        }
+    });
+
+    var permalinkTemplate = $.templates("#permalinkTmpl");
+    permalinkTemplate.link("#permalink", permalink);
+
+
     if (mode == "latest") {
         $.getJSON(appRoot + 'api/tests/latest', function (data) {
             fillData();
@@ -177,6 +195,7 @@ $(document).ready(function () {
         else facet_sizes[facet] *= 2;
 
         $.getJSON(appRoot + 'api/error/facets', {filters: error_filters, sizes:facet_sizes, test:unprefix(test_item)}, function (data) {
+
             setFacets(data);
         });
 
