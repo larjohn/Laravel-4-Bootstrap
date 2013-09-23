@@ -16,7 +16,7 @@
 
                 @%for results%@
                 <div class="row-fluid result">
-                    <h4> @%:id%@ </h4>
+                    <h4> @%curie:id%@ </h4>
                     <div> @%:sparql%@ </div>
 
                 </div>

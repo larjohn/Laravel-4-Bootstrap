@@ -6,7 +6,7 @@
  * Time: 3:56 μμ
 
  */
-
+use Legrand\SPARQLModel;
 class RDFQueryController extends BaseController
 {
 
@@ -15,6 +15,13 @@ class RDFQueryController extends BaseController
 
     public function getList(){
         return Response::json(RDFQuery::getAllQueries());
+    }
+
+    public function getItem(){
+        $id = Input::get('query', null);
+        $query = RDFQuery::find($id);
+
+        return Response::json($query->toArray(true));
     }
 
 

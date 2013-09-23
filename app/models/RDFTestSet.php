@@ -71,6 +71,8 @@ class RDFTestSet extends SPARQLModel {
     }
 
 
+
+
     public function countErrors(){
         $sparql = new SPARQL();
         $sparql->baseUrl= self::getConfig('sparqlmodel.endpoint');

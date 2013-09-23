@@ -136,6 +136,13 @@ class RDFTestController extends BaseController
         return Response::json(RDFTestSet::getTests());
     }
 
+    public function getItem(){
+        $id = Input::get('test', null);
+        $test = RDFTestSet::find($id);
+
+        return Response::json($test->toArray(true));
+    }
+
 
 
 }

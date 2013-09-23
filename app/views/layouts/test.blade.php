@@ -12,13 +12,8 @@
     </a>
 
     <div class="media-body hidden-tablet">
-        <a href="{{{URL::to('tests/item/'.$test)}}}"><h5 class="media-heading">{{$test}}</h5><a/>
-        <ul class="unstyled user-info">
-            <li><a href="">Full Test</a></li>
-            <li>Execution Date: <br/>
-                <small><i class="icon-calendar"></i> 16 Mar 16:32</small>
-            </li>
-        </ul>
+        <a href="{{{URL::to('tests/item/'.$test)}}}"><h5 class="media-heading">{{$test}}</h5></a>
+
     </div>
 </div>
 <!-- /.user-media -->

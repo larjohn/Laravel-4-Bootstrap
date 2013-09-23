@@ -23,14 +23,8 @@
 
         <h3 id="test_name"></h3>
     </div>
-    <div class="row-fluid">
-        <h2>Details</h2>
-        <div class="row">
-            Date
-        </div>
-        <div class="row">
-            Errors
-        </div>
+    <div id="details" class="row-fluid">
+
     </div>
 
     <div class="row-fluid">
@@ -39,6 +33,22 @@
         <div id="search_query">&nbsp;</div>
         <div id="results"></div>
     </div>
+
+
+
+    <script id="itemTmpl" type="text/x-jsrender">
+
+
+                <div class="row-fluid result">
+                    <h4>Test identifier: @%curie:id%@ </h4>
+                    <div>Execution Start Date: @%:start%@ </div>
+                    <div>Execution End Date: @%:end%@ </div>
+                    <div>Errors found: @%:errorsCount%@ </div>
+
+                </div>
+
+                </script>
+
 
     <script id="resultsTmpl" type="text/x-jsrender">
 
@@ -71,10 +81,25 @@
 
         }
 
+
+        function setDetails(data){
+
+
+            var itemTemplate = $.templates("#itemTmpl");
+
+            itemTemplate.link("#details", data);
+
+
+        }
+
         $(document).ready(function () {
 
 
-
+            $(document).ready(function (){
+                jQuery.getJSON( appRoot+ "api/tests/item?test=" +test_item, function( data ) {
+                    setDetails(data);
+                });
+            });
 
             window.visualSearch = VS.init({
                 container: $('#search_box_container'),
