@@ -40,13 +40,14 @@ function fillData() {
             test: unprefix(test_item)
         },
         autowidth: true,
+        shrinktofit:true,
         datatype: "json",
         mtype: "GET",
         colNames: ["Actions", "Resource", "Property", "Query"],
         colModel: [
          //   {name: 'checkbox', index: 'checkbox', formatter: "checkbox", formatoptions: { disabled: false } },
 
-            { name: "view", formatter: function (cellvalue, options, rowObject) {
+            { name: "view", width:"30%", formatter: function (cellvalue, options, rowObject) {
                 return '<a href="#myModal" role="button" class="btn btn-info view-item" data-row="' + options.rowId + '" data-resource="' + rowObject.violationRoot[0].id + '" data-property="' + rowObject.violationPath[0].id + '" data-test="' + test_item + '"  data-query="' + rowObject.query + '"    data-toggle="modal">Details</a>';
             } },
             { name: "violationRoot.0.id", formatter: function (cellvalue, options, rowObject) {
@@ -55,7 +56,7 @@ function fillData() {
                 return "<span title='" + rowObject.violationRoot[0].id + "'>" + abbr + "</span><a href='" + decoded + "' title='" + rowObject.violationRoot[0].id + "' target='_blank'>   <i class='icon-external-link'></i> </a>"
 
             } },
-            { name: "violationPath.0.id", align: "right",
+            { name: "violationPath.0.id",
                 formatter: function (cellvalue, options, rowObject) {
                     var decoded = decodeURIComponent(cellvalue);
                     var abbr = prefix(decoded);
@@ -64,7 +65,7 @@ function fillData() {
                 }
             },
             // { name: "test.0.id",  align: "right" },
-            { name: "query.0.id", align: "right",
+            { name: "query.0.id",
                 formatter: function (cellvalue, options, rowObject) {
                     if(rowObject.query==undefined)return "";
                     var decoded = decodeURIComponent(cellvalue);

@@ -1,7 +1,20 @@
 @extends('layouts.test')
 @section('content')
 
-
+<style type="text/css">
+    .ui-jqgrid tr.jqgrow td {
+        word-wrap: break-word; /* IE 5.5+ and CSS3 */
+        white-space: pre-wrap; /* CSS3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        overflow: hidden;
+        height: auto;
+        vertical-align: middle;
+        padding-top: 3px;
+        padding-bottom: 3px
+    }
+</style>
 
 
 <script src="{{{ asset('assets/js/jqGrid/i18n/grid.locale-en.js') }}}" type="text/javascript"></script>
